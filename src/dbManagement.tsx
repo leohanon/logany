@@ -37,11 +37,18 @@ export const addLogItem = async (logItem: LogItem) => {
 export const getLogItems = async (logId: string) => {
   const db = await initDB();
   const transaction = db.transaction(STORE_NAME);
-  const strengthIndex = transaction.store.index("byLog");
-  return strengthIndex.getAll(logId);
+  const logIndexed = transaction.store.index("byLog");
+  return logIndexed.getAll(logId);
 };
 
 export const deleteLogItem = async (id: string) => {
   const db = await initDB();
   return db.delete(STORE_NAME, id);
+};
+
+export const getCount = async (logId: string) => {
+  const db = await initDB();
+  const transaction = db.transaction(STORE_NAME);
+  const logIndexed = transaction.store.index("byLog");
+  return logIndexed.count(logId);
 };
