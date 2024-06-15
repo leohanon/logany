@@ -1,0 +1,47 @@
+import { DBSchema, IDBPDatabase, openDB } from "idb";
+import { LogItem } from "./LogTypes";
+
+const DATABASE_NAME = "logsDatabase";
+const STORE_NAME = "logs";
+const VERSION = 1;
+
+interface MyDB extends DBSchema {
+  logs: {
+    key: string;
+    value: LogItem;
+    indexes: { byLog: string };
+  };
+}
+
+let dbInstance: IDBPDatabase<MyDB> | null = null;
+export const initDB = async () => {
+  if (dbInstance) {
+    return dbInstance;
+  }
+  dbInstance = await openDB<MyDB>(DATABASE_NAME, VERSION, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const logStore = db.createObjectStore(STORE_NAME, { keyPath: "id" });
+        logStore.createIndex("byLog", "logId");
+      }
+    },
+  });
+  return dbInstance;
+};
+
+export const addLogItem = async (logItem: LogItem) => {
+  const db = await initDB();
+  return db.add(STORE_NAME, logItem);
+};
+
+export const getLogItems = async (logId: string) => {
+  const db = await initDB();
+  const transaction = db.transaction(STORE_NAME);
+  const strengthIndex = transaction.store.index("byLog");
+  return strengthIndex.getAll(logId);
+};
+
+export const deleteLogItem = async (id: string) => {
+  const db = await initDB();
+  return db.delete(STORE_NAME, id);
+};
