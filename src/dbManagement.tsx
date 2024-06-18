@@ -46,6 +46,15 @@ export const deleteLogItem = async (id: string) => {
   return db.delete(STORE_NAME, id);
 };
 
+export const deleteLog = async (logId: string) => {
+  const db = await initDB();
+  const transaction = db.transaction(STORE_NAME);
+  const logIndexed = transaction.store.index("byLog");
+  return (await logIndexed.getAll(logId)).map((x) =>
+    db.delete(STORE_NAME, x.id),
+  );
+};
+
 export const getCount = async (logId: string) => {
   const db = await initDB();
   const transaction = db.transaction(STORE_NAME);

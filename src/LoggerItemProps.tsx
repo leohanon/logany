@@ -4,8 +4,14 @@ type LoggerItemProps = {
   value: string;
   logId: string;
   editMode: boolean;
+  onDelete: () => void;
 };
-export function LoggerItem({ value, logId, editMode }: LoggerItemProps) {
+export function LoggerItem({
+  value,
+  logId,
+  editMode,
+  onDelete,
+}: LoggerItemProps) {
   const handleQuickAdd = () => {
     const logItem = {
       id: Date.now().toString(),
@@ -22,7 +28,7 @@ export function LoggerItem({ value, logId, editMode }: LoggerItemProps) {
       {value}
       <button onClick={handleQuickAdd}>Quick Add</button>
       <button>CustomAdd</button>
-      {editMode && <button>Delete</button>}
+      {editMode && <button onClick={onDelete}>Delete</button>}
     </li>
   );
 }
