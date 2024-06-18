@@ -1,20 +1,24 @@
-import { useState } from "react";
 import "./App.css";
+import { IndividualLog } from "./IndividualLog";
 import { LoggerList } from "./LoggerList";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LoggerList />,
+    errorElement: <div>404 Not Found</div>,
+  },
+  {
+    path: "/:logId",
+    element: <IndividualLog />,
+  },
+]);
 
 function App() {
-  const [editMode, setEditMode] = useState(false);
-
-  const toggleEditMode = () => {
-    setEditMode((oldMode) => {
-      return !oldMode;
-    });
-  };
-
   return (
     <>
-      <button onClick={toggleEditMode}>{editMode ? "Save" : "Edit"}</button>
-      <LoggerList editMode={editMode} />
+      <RouterProvider router={router}></RouterProvider>
     </>
   );
 }

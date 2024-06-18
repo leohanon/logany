@@ -1,3 +1,4 @@
+import { Link, useNavigate } from "react-router-dom";
 import { addLogItem } from "./dbManagement";
 
 type LoggerItemProps = {
@@ -21,10 +22,12 @@ export function LoggerItem({
     };
     addLogItem(logItem);
   };
-
+  const navigate = useNavigate();
   return (
     <li>
-      <button>View</button>
+      <button onClick={() => navigate(`/${logId}`, { replace: true })}>
+        View
+      </button>
       {value}
       <button onClick={handleQuickAdd}>Quick Add</button>
       <button>CustomAdd</button>
