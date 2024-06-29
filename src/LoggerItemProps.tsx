@@ -25,7 +25,7 @@ export function LoggerItem({
   const navigate = useNavigate();
   return (
     <li>
-      <button onClick={() => navigate(`/${logId}`, { replace: true })}>
+      <button onClick={() => navigate(`logs/${logId}`, { replace: true })}>
         View
       </button>
       {value}

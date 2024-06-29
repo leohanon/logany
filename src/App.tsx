@@ -2,16 +2,23 @@ import "./App.css";
 import { IndividualLog } from "./IndividualLog";
 import { LoggerList } from "./LoggerList";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { MainMenu } from "./MainMenu";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoggerList />,
+    element: <MainMenu />,
     errorElement: <div>404 Not Found</div>,
-  },
-  {
-    path: "/:logId",
-    element: <IndividualLog />,
+    children: [
+      {
+        path: "logs/:logId",
+        element: <IndividualLog />,
+      },
+      {
+        path: "/",
+        element: <LoggerList />,
+      },
+    ],
   },
 ]);
 
