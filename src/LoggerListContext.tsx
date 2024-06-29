@@ -7,16 +7,19 @@ import {
   useState,
 } from "react";
 import { Log } from "./LogTypes";
+import { addLogItem } from "./dbManagement";
 
 export type logger = {
   id: string;
   name: string;
 };
 
-type loggerListHook = [
-  loggerList: Log[],
-  setLoggerList: Dispatch<SetStateAction<logger[]>>,
-];
+type loggerListHook = {
+  loggerList: Log[];
+  setLoggerList: Dispatch<SetStateAction<logger[]>>;
+  handleAddLogList: (name: string) => void;
+  handleQuickAddToLog: (logId: string) => void;
+};
 
 const LoggerListContext = createContext<loggerListHook | undefined>(undefined);
 
@@ -30,12 +33,36 @@ export function LoggerListContextProvider({
     if (!logs) return [];
     return JSON.parse(logs);
   });
+
   useEffect(() => {
     const logs = JSON.stringify(loggerList);
     localStorage.setItem("LOGS", logs);
   }, [loggerList]);
+
+  const handleAddLogList = (name: string) => {
+    const newLog = { id: crypto.randomUUID(), name: name };
+    setLoggerList((oldList) => [...oldList, newLog]);
+  };
+
+  const handleQuickAddToLog = (logId: string) => {
+    const logItem = {
+      id: Date.now().toString(),
+      logId: logId,
+      timestamp: Date.now(),
+      note: "",
+    };
+    addLogItem(logItem);
+  };
+
   return (
-    <LoggerListContext.Provider value={[loggerList, setLoggerList]}>
+    <LoggerListContext.Provider
+      value={{
+        loggerList,
+        setLoggerList,
+        handleAddLogList,
+        handleQuickAddToLog,
+      }}
+    >
       {children}
     </LoggerListContext.Provider>
   );

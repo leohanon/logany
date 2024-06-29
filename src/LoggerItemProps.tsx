@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { addLogItem } from "./dbManagement";
+import { useLoggerListContext } from "./LoggerListContext";
 
 type LoggerItemProps = {
   value: string;
@@ -13,15 +13,7 @@ export function LoggerItem({
   editMode,
   onDelete,
 }: LoggerItemProps) {
-  const handleQuickAdd = () => {
-    const logItem = {
-      id: Date.now().toString(),
-      logId: logId,
-      timestamp: Date.now(),
-      note: "",
-    };
-    addLogItem(logItem);
-  };
+  const { handleQuickAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
   return (
     <li>
@@ -29,7 +21,7 @@ export function LoggerItem({
         View
       </button>
       {value}
-      <button onClick={handleQuickAdd}>Quick Add</button>
+      <button onClick={() => handleQuickAddToLog(logId)}>Quick Add</button>
       <button>CustomAdd</button>
       {editMode && <button onClick={onDelete}>Delete</button>}
     </li>

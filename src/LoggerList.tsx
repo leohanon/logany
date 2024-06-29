@@ -13,12 +13,8 @@ export function LoggerList() {
     });
   };
 
-  const [loggerList, setLoggerList] = useLoggerListContext();
-
-  const handleAddLogList = (name: string) => {
-    const newLog = { id: crypto.randomUUID(), name: name };
-    setLoggerList((oldList) => [...oldList, newLog]);
-  };
+  const { loggerList, setLoggerList, handleAddLogList } =
+    useLoggerListContext();
 
   const handleDelete = (id: string) => {
     setLoggerList((oldList) => oldList.filter((x) => x.id != id));

@@ -16,7 +16,16 @@ export const useCommandBar = () => {
     };
   }, []);
 
-  const [loggerList] = useLoggerListContext();
+  const { loggerList, handleAddLogList, handleQuickAddToLog } =
+    useLoggerListContext();
+
+  window.CommandBar.addCallback("addNewLog", (args: { name: string }) => {
+    handleAddLogList(args.name);
+  });
+
+  window.CommandBar.addCallback("quickLog", (args: any) => {
+    handleQuickAddToLog(args.record.id);
+  });
 
   useEffect(() => {
     window.CommandBar.addRecords("logs", loggerList, { labelKey: "name" });
@@ -29,6 +38,15 @@ export const useCommandBar = () => {
       type: "link",
       value: "/logs/{{record.id}}",
       operation: "self",
+    },
+  });
+
+  window.CommandBar.addRecordAction("logs", {
+    text: "Add to log",
+    name: "add_to_log",
+    template: {
+      type: "callback",
+      value: "quickLog",
     },
   });
 
