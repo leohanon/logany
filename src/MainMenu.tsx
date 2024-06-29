@@ -3,9 +3,5 @@ import { useCommandBar } from "./useCommandbar";
 
 export function MainMenu() {
   useCommandBar();
-  return (
-    <>
-      <Outlet></Outlet>
-    </>
-  );
+  return <Outlet></Outlet>;
 }

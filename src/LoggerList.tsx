@@ -1,27 +1,19 @@
-import { useEffect, useState } from "react";
-import { Log } from "./LogTypes";
+import { useState } from "react";
 import { CreateLogger } from "./CreateLogger";
 import { LoggerItem } from "./LoggerItemProps";
 import { deleteLog } from "./dbManagement";
+import { useLoggerListContext } from "./LoggerListContext";
 
 export function LoggerList() {
-  const [loggerList, setLoggerList] = useState<Log[]>(() => {
-    const logs = localStorage.getItem("LOGS");
-    if (!logs) return [];
-    return JSON.parse(logs);
-  });
   const [editMode, setEditMode] = useState(false);
-
-  useEffect(() => {
-    const logs = JSON.stringify(loggerList);
-    localStorage.setItem("LOGS", logs);
-  }, [loggerList]);
 
   const toggleEditMode = () => {
     setEditMode((oldMode) => {
       return !oldMode;
     });
   };
+
+  const [loggerList, setLoggerList] = useLoggerListContext();
 
   const handleAddLogList = (name: string) => {
     const newLog = { id: crypto.randomUUID(), name: name };

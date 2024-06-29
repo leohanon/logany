@@ -3,6 +3,7 @@ import { IndividualLog } from "./IndividualLog";
 import { LoggerList } from "./LoggerList";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { MainMenu } from "./MainMenu";
+import { LoggerListContextProvider } from "./LoggerListContext";
 
 const router = createBrowserRouter([
   {
@@ -24,9 +25,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <LoggerListContextProvider>
       <RouterProvider router={router}></RouterProvider>
-    </>
+    </LoggerListContextProvider>
   );
 }
 

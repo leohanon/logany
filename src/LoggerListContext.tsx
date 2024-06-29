@@ -3,8 +3,10 @@ import {
   SetStateAction,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
+import { Log } from "./LogTypes";
 
 export type logger = {
   id: string;
@@ -12,7 +14,7 @@ export type logger = {
 };
 
 type loggerListHook = [
-  loggerList: logger[],
+  loggerList: Log[],
   setLoggerList: Dispatch<SetStateAction<logger[]>>,
 ];
 
@@ -23,7 +25,15 @@ export function LoggerListContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [loggerList, setLoggerList] = useState<logger[]>([]);
+  const [loggerList, setLoggerList] = useState<Log[]>(() => {
+    const logs = localStorage.getItem("LOGS");
+    if (!logs) return [];
+    return JSON.parse(logs);
+  });
+  useEffect(() => {
+    const logs = JSON.stringify(loggerList);
+    localStorage.setItem("LOGS", logs);
+  }, [loggerList]);
   return (
     <LoggerListContext.Provider value={[loggerList, setLoggerList]}>
       {children}
