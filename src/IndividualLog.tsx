@@ -3,11 +3,13 @@ import { getLogItems } from "./dbManagement";
 import { useEffect, useState } from "react";
 import { LogItem } from "./LogTypes";
 import { LogItemDisplay } from "./LogItemDisplay";
+import { useLoggerListContext } from "./LoggerListContext";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
   const [editMode, setEditMode] = useState(false);
   const [logItems, setLogItems] = useState<LogItem[]>([]);
+  const { updateUid } = useLoggerListContext();
 
   useEffect(() => {
     const fetchLogItems = async () => {
@@ -15,14 +17,13 @@ export function IndividualLog() {
         const promise = getLogItems(logId ? logId : "");
         const items = await promise;
         setLogItems(items);
-        console.log(logItems);
       } catch (error) {
         console.error("Failed to fetch log items:", error);
       }
     };
 
     fetchLogItems();
-  }, []);
+  }, [logId, logItems, updateUid]);
 
   const handleToggle = () => {
     setEditMode((oldMode) => !oldMode);

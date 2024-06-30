@@ -16,6 +16,7 @@ export type logger = {
 
 type loggerListHook = {
   loggerList: Log[];
+  updateUid: string;
   setLoggerList: Dispatch<SetStateAction<logger[]>>;
   handleAddLogList: (name: string) => void;
   handleQuickAddToLog: (logId: string) => void;
@@ -33,6 +34,8 @@ export function LoggerListContextProvider({
     if (!logs) return [];
     return JSON.parse(logs);
   });
+
+  const [updateUid, setUpdateUid] = useState(() => crypto.randomUUID());
 
   useEffect(() => {
     const logs = JSON.stringify(loggerList);
@@ -52,12 +55,14 @@ export function LoggerListContextProvider({
       note: "",
     };
     addLogItem(logItem);
+    setUpdateUid(crypto.randomUUID());
   };
 
   return (
     <LoggerListContext.Provider
       value={{
         loggerList,
+        updateUid,
         setLoggerList,
         handleAddLogList,
         handleQuickAddToLog,
