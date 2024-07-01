@@ -16,39 +16,50 @@ export const useCommandBar = () => {
     };
   }, []);
 
-  const { loggerList, handleAddLogList, handleQuickAddToLog } =
+  const { loggerList, handleAddLogList, handleAddToLog } =
     useLoggerListContext();
 
   window.CommandBar.addCallback("addNewLog", (args: { name: string }) => {
     handleAddLogList(args.name);
   });
 
-  window.CommandBar.addCallback("quickLog", (args: any) => {
-    handleQuickAddToLog(args.record.id);
-  });
+  window.CommandBar.addCallback(
+    "quickLog",
+    (args: { record: { id: string } }) => {
+      handleAddToLog(args.record.id, "");
+    },
+  );
 
   useEffect(() => {
     window.CommandBar.addRecords("logs", loggerList, { labelKey: "name" });
   }, [loggerList]);
 
-  window.CommandBar.addRecordAction("logs", {
-    text: "View log",
-    name: "view_log",
-    template: {
-      type: "link",
-      value: "/logs/{{record.id}}",
-      operation: "self",
+  window.CommandBar.addRecordAction(
+    "logs",
+    {
+      text: "View log",
+      name: "view_log",
+      template: {
+        type: "link",
+        value: "/logs/{{record.id}}",
+        operation: "self",
+      },
     },
-  });
+    false,
+  );
 
-  window.CommandBar.addRecordAction("logs", {
-    text: "Add to log",
-    name: "add_to_log",
-    template: {
-      type: "callback",
-      value: "quickLog",
+  window.CommandBar.addRecordAction(
+    "logs",
+    {
+      text: "Add to log",
+      name: "add_to_log",
+      template: {
+        type: "callback",
+        value: "quickLog",
+      },
     },
-  });
+    true,
+  );
 
   const navigate = useNavigate();
   useEffect(() => {

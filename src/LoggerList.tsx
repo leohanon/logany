@@ -36,7 +36,7 @@ export function LoggerList() {
             />
           );
         })}
-        <CreateLogger onSubmit={handleAddLogList} />
+        {!editMode && <CreateLogger onSubmit={handleAddLogList} />}
       </ul>
     </>
   );

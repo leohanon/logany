@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { LogItem } from "./LogTypes";
 import { LogItemDisplay } from "./LogItemDisplay";
 import { useLoggerListContext } from "./LoggerListContext";
+import { CreateLogger } from "./CreateLogger";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
@@ -29,14 +30,22 @@ export function IndividualLog() {
     setEditMode((oldMode) => !oldMode);
   };
 
+  const { handleAddToLog } = useLoggerListContext();
+
   const navigate = useNavigate();
 
   return (
     <>
       <button onClick={() => navigate("/", { replace: true })}>Back</button>
-      <button>add</button>
       <button onClick={handleToggle}>{editMode ? "save" : "edit"}</button>
       <ul>
+        {!editMode && (
+          <CreateLogger
+            onSubmit={(value: string) =>
+              handleAddToLog(logId ? logId : "", value)
+            }
+          />
+        )}
         {logItems.map((x) => {
           return <LogItemDisplay key={x.id} logItem={x} editMode={editMode} />;
         })}

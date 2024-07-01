@@ -36,9 +36,17 @@ export const addLogItem = async (logItem: LogItem) => {
 
 export const getLogItems = async (logId: string) => {
   const db = await initDB();
-  const transaction = db.transaction(STORE_NAME);
+  const transaction = db.transaction(STORE_NAME, "readonly");
   const logIndexed = transaction.store.index("byLog");
-  return logIndexed.getAll(logId);
+  let cursor = await logIndexed.openCursor(logId, "prev");
+  const items = [];
+  while (cursor) {
+    items.push(cursor.value);
+    cursor = await cursor.continue(); // Move to the next item in the index
+  }
+
+  await transaction.done; // Ensure the transaction is completed before returning
+  return items;
 };
 
 export const deleteLogItem = async (id: string) => {

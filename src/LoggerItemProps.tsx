@@ -13,16 +13,20 @@ export function LoggerItem({
   editMode,
   onDelete,
 }: LoggerItemProps) {
-  const { handleQuickAddToLog } = useLoggerListContext();
+  const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
   return (
     <li>
-      <button onClick={() => navigate(`logs/${logId}`, { replace: true })}>
-        View
-      </button>
+      {!editMode && (
+        <button onClick={() => navigate(`logs/${logId}`, { replace: true })}>
+          View
+        </button>
+      )}
       {value}
-      <button onClick={() => handleQuickAddToLog(logId)}>Quick Add</button>
-      <button>CustomAdd</button>
+      {!editMode && (
+        <button onClick={() => handleAddToLog(logId, "")}>Quick Add</button>
+      )}
+      {!editMode && <button>CustomAdd</button>}
       {editMode && <button onClick={onDelete}>Delete</button>}
     </li>
   );

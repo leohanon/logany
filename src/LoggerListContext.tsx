@@ -19,7 +19,7 @@ type loggerListHook = {
   updateUid: string;
   setLoggerList: Dispatch<SetStateAction<logger[]>>;
   handleAddLogList: (name: string) => void;
-  handleQuickAddToLog: (logId: string) => void;
+  handleAddToLog: (logId: string, message: string) => void;
 };
 
 const LoggerListContext = createContext<loggerListHook | undefined>(undefined);
@@ -47,12 +47,12 @@ export function LoggerListContextProvider({
     setLoggerList((oldList) => [...oldList, newLog]);
   };
 
-  const handleQuickAddToLog = (logId: string) => {
+  const handleAddToLog = (logId: string, message: string) => {
     const logItem = {
       id: Date.now().toString(),
       logId: logId,
       timestamp: Date.now(),
-      note: "",
+      note: message,
     };
     addLogItem(logItem);
     setUpdateUid(crypto.randomUUID());
@@ -65,7 +65,7 @@ export function LoggerListContextProvider({
         updateUid,
         setLoggerList,
         handleAddLogList,
-        handleQuickAddToLog,
+        handleAddToLog,
       }}
     >
       {children}
