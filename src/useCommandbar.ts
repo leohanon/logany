@@ -19,47 +19,59 @@ export const useCommandBar = () => {
   const { loggerList, handleAddLogList, handleAddToLog } =
     useLoggerListContext();
 
-  window.CommandBar.addCallback("addNewLog", (args: { name: string }) => {
-    handleAddLogList(args.name);
-  });
+  useEffect(() => {
+    window.CommandBar.addCallback("addNewLog", (args: { name: string }) => {
+      handleAddLogList(args.name);
+    });
+  }, [handleAddLogList]);
 
-  window.CommandBar.addCallback(
-    "quickLog",
-    (args: { record: { id: string } }) => {
-      handleAddToLog(args.record.id, "");
-    },
-  );
+  useEffect(() => {
+    window.CommandBar.addCallback(
+      "quickLog",
+      (args: { record: { id: string } }) => {
+        handleAddToLog(args.record.id, "");
+      },
+    );
+    window.CommandBar.addCallback(
+      "customLog",
+      (args: { message: string }, context: { currentLogId: string }) => {
+        handleAddToLog(context.currentLogId, args.message);
+      },
+    );
+  }, [handleAddToLog]);
 
   useEffect(() => {
     window.CommandBar.addRecords("logs", loggerList, { labelKey: "name" });
   }, [loggerList]);
 
-  window.CommandBar.addRecordAction(
-    "logs",
-    {
-      text: "View log",
-      name: "view_log",
-      template: {
-        type: "link",
-        value: "/logs/{{record.id}}",
-        operation: "self",
+  useEffect(() => {
+    window.CommandBar.addRecordAction(
+      "logs",
+      {
+        text: "View log",
+        name: "view_log",
+        template: {
+          type: "link",
+          value: "/logs/{{record.id}}",
+          operation: "self",
+        },
       },
-    },
-    false,
-  );
+      false,
+    );
 
-  window.CommandBar.addRecordAction(
-    "logs",
-    {
-      text: "Add to log",
-      name: "add_to_log",
-      template: {
-        type: "callback",
-        value: "quickLog",
+    window.CommandBar.addRecordAction(
+      "logs",
+      {
+        text: "Add to log",
+        name: "add_to_log",
+        template: {
+          type: "callback",
+          value: "quickLog",
+        },
       },
-    },
-    true,
-  );
+      true,
+    );
+  }, []);
 
   const navigate = useNavigate();
   useEffect(() => {

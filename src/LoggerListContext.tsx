@@ -20,6 +20,8 @@ type loggerListHook = {
   setLoggerList: Dispatch<SetStateAction<logger[]>>;
   handleAddLogList: (name: string) => void;
   handleAddToLog: (logId: string, message: string) => void;
+  activeLogId: string;
+  setActiveLogId: Dispatch<SetStateAction<string>>;
 };
 
 const LoggerListContext = createContext<loggerListHook | undefined>(undefined);
@@ -36,6 +38,7 @@ export function LoggerListContextProvider({
   });
 
   const [updateUid, setUpdateUid] = useState(() => crypto.randomUUID());
+  const [activeLogId, setActiveLogId] = useState("");
 
   useEffect(() => {
     const logs = JSON.stringify(loggerList);
@@ -66,6 +69,8 @@ export function LoggerListContextProvider({
         setLoggerList,
         handleAddLogList,
         handleAddToLog,
+        activeLogId,
+        setActiveLogId,
       }}
     >
       {children}
