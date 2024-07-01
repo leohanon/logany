@@ -16,8 +16,13 @@ export const useCommandBar = () => {
     };
   }, []);
 
-  const { loggerList, handleAddLogList, handleAddToLog } =
+  const { loggerList, handleAddLogList, handleAddToLog, activeLogId } =
     useLoggerListContext();
+
+  useEffect(() => {
+    const log = loggerList.find((x) => x.id == activeLogId);
+    window.CommandBar.addMetadata("activeLog", log);
+  }, [activeLogId, loggerList]);
 
   useEffect(() => {
     window.CommandBar.addCallback("addNewLog", (args: { name: string }) => {
@@ -34,8 +39,11 @@ export const useCommandBar = () => {
     );
     window.CommandBar.addCallback(
       "customLog",
-      (args: { message: string }, context: { currentLogId: string }) => {
-        handleAddToLog(context.currentLogId, args.message);
+      (
+        args: { message: string },
+        context: { activeLog: { id: string; name: string } },
+      ) => {
+        handleAddToLog(context.activeLog.id, args.message);
       },
     );
   }, [handleAddToLog]);

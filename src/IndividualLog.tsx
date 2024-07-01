@@ -30,7 +30,11 @@ export function IndividualLog() {
     setEditMode((oldMode) => !oldMode);
   };
 
-  const { handleAddToLog } = useLoggerListContext();
+  const { handleAddToLog, setActiveLogId } = useLoggerListContext();
+
+  useEffect(() => {
+    setActiveLogId(logId ? logId : "");
+  }, [logId, setActiveLogId]);
 
   const navigate = useNavigate();
 
