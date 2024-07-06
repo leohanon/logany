@@ -5,6 +5,8 @@ body {
   max-width: 600px;
   margin: auto;
   width: 100%;
+  font-family: Lato;
+  font-size: medium;
 }
 .toolbar {
   top: 0;
@@ -15,17 +17,37 @@ body {
   padding: 0px;
   align-items: center;
   justify-content: space-between;
-  background-color: aqua;
+  background-color: #023047;
+  color: whitesmoke;
+  font-size: larger;
+}
+.logo {
+  margin-left: 20px;
+  font-weight: bold;
+  font-size: x-large;
+}
+@font-face {
+  font-family: Lato;
+  src: url(../Lato-Regular.ttf);
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: Lato;
+  src: url(../Lato-Bold.ttf);
+  font-weight: bold;
+  font-style: normal;
 }
 .editButton {
   width: 58px;
-  height: 68px;
+  height: 60px;
   padding: 0;
+  margin-right: 5px;
   background-color: transparent;
   border: 0;
 }
 .editButton:active {
-  background-color: aquamarine;
+  background-color: #219ebc;
 }
 ul {
   margin: 0;
@@ -55,11 +77,13 @@ li {
   height: 60px;
   width: 60px;
   border: 0;
+  padding: 3px;
 }
 .createButton {
   width: 100%;
   height: 60px;
   border: 0;
+  font-size: medium;
 }
 .icon {
   height: 100%;

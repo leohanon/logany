@@ -5,8 +5,7 @@ import { LogItem } from "./LogTypes";
 import { LogItemDisplay } from "./LogItemDisplay";
 import { useLoggerListContext } from "./LoggerListContext";
 import { CreateLogger } from "./CreateLogger";
-import { BiEditAlt, BiSave } from "react-icons/bi";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { IndividualLogNavBar } from "./IndividualLogNavBar";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
@@ -31,6 +30,8 @@ export function IndividualLog() {
   const handleToggle = () => {
     setEditMode((oldMode) => !oldMode);
   };
+  const navigate = useNavigate();
+  const handleGoHome = () => navigate("/", { replace: true });
 
   const { handleAddToLog, setActiveLogId } = useLoggerListContext();
 
@@ -38,25 +39,14 @@ export function IndividualLog() {
     setActiveLogId(logId ? logId : "");
   }, [logId, setActiveLogId]);
 
-  const navigate = useNavigate();
-
   return (
     <>
-      <div className="toolbar">
-        <button
-          className="editButton"
-          onClick={() => navigate("/", { replace: true })}
-        >
-          <IoMdArrowRoundBack className="icon" />
-        </button>
-        <button className="editButton" onClick={handleToggle}>
-          {editMode ? (
-            <BiSave className="icon" />
-          ) : (
-            <BiEditAlt className="icon" />
-          )}
-        </button>
-      </div>
+      <IndividualLogNavBar
+        logId={logId ? logId : ""}
+        editMode={editMode}
+        handleGoHome={handleGoHome}
+        handleToggle={handleToggle}
+      />
       <ul>
         {!editMode && (
           <CreateLogger

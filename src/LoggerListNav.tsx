@@ -1,5 +1,6 @@
 import { BiEditAlt, BiSave } from "react-icons/bi";
 import "./App.css";
+import { IconContext } from "react-icons";
 
 type LoggerListNavProps = {
   editMode: boolean;
@@ -12,13 +13,15 @@ export function LoggerListNav({
 }: LoggerListNavProps) {
   return (
     <div className="toolbar">
-      <div>Logg</div>
+      <div className="logo">Logg</div>
       <button className="editButton" onClick={onToggleEditMode}>
-        {editMode ? (
-          <BiSave className="icon" />
-        ) : (
-          <BiEditAlt className="icon" />
-        )}
+        <IconContext.Provider value={{ color: "white" }}>
+          {editMode ? (
+            <BiSave className="icon" />
+          ) : (
+            <BiEditAlt className="icon" />
+          )}
+        </IconContext.Provider>
       </button>
     </div>
   );
