@@ -27,10 +27,15 @@ export function CreateLogger({ onSubmit }: CreateLoggerProps) {
 
   return (
     <li>
-      {!editMode && <button onClick={handleClick}>Create New</button>}
+      {!editMode && (
+        <button className="createButton" onClick={handleClick}>
+          + Create New
+        </button>
+      )}
       {editMode && (
         <form onSubmit={handleSubmit}>
           <input
+            className="createButton"
             ref={inputRef}
             type="text"
             value={name}

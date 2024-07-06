@@ -1,42 +1,68 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+* {
+  box-sizing: border-box;
 }
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+body {
+  max-width: 600px;
+  margin: auto;
+  width: 100%;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.toolbar {
+  top: 0;
+  position: sticky;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  padding: 0px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: aqua;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.editButton {
+  width: 58px;
+  height: 68px;
+  padding: 0;
+  background-color: transparent;
+  border: 0;
 }
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);q
-  }
+.editButton:active {
+  background-color: aquamarine;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
-
-.card {
-  padding: 2em;
+li {
+  margin: 0px 20px;
+  padding: 10px 0px;
 }
-
-.read-the-docs {
-  color: #888;
+.liLog {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.liInternal {
+  display: flex;
+  align-items: center;
+}
+.viewButton,
+.customAddButton {
+  margin-right: 10px;
+}
+.liButton,
+.viewButton,
+.customAddButton {
+  height: 60px;
+  width: 60px;
+  border: 0;
+}
+.createButton {
+  width: 100%;
+  height: 60px;
+  border: 0;
+}
+.icon {
+  height: 100%;
+  width: 100%;
+  padding: 15px;
 }

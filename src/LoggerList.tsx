@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { CreateLogger } from "./CreateLogger";
-import { LoggerItem } from "./LoggerItemProps";
+import { LoggerItem } from "./LoggerItem";
 import { deleteLog } from "./dbManagement";
 import { useLoggerListContext } from "./LoggerListContext";
+import { LoggerListNav } from "./LoggerListNav";
 
 export function LoggerList() {
   const [editMode, setEditMode] = useState(false);
@@ -23,7 +24,7 @@ export function LoggerList() {
 
   return (
     <>
-      <button onClick={toggleEditMode}>{editMode ? "Save" : "Edit"}</button>
+      <LoggerListNav editMode={editMode} onToggleEditMode={toggleEditMode} />
       <ul>
         {loggerList.map((x) => {
           return (

@@ -5,6 +5,8 @@ import { LogItem } from "./LogTypes";
 import { LogItemDisplay } from "./LogItemDisplay";
 import { useLoggerListContext } from "./LoggerListContext";
 import { CreateLogger } from "./CreateLogger";
+import { BiEditAlt, BiSave } from "react-icons/bi";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
@@ -40,8 +42,21 @@ export function IndividualLog() {
 
   return (
     <>
-      <button onClick={() => navigate("/", { replace: true })}>Back</button>
-      <button onClick={handleToggle}>{editMode ? "save" : "edit"}</button>
+      <div className="toolbar">
+        <button
+          className="editButton"
+          onClick={() => navigate("/", { replace: true })}
+        >
+          <IoMdArrowRoundBack className="icon" />
+        </button>
+        <button className="editButton" onClick={handleToggle}>
+          {editMode ? (
+            <BiSave className="icon" />
+          ) : (
+            <BiEditAlt className="icon" />
+          )}
+        </button>
+      </div>
       <ul>
         {!editMode && (
           <CreateLogger
