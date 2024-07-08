@@ -1,4 +1,5 @@
 import { DBSchema, IDBPDatabase, openDB } from "idb";
+
 import { LogItem } from "./LogTypes";
 
 const DATABASE_NAME = "logsDatabase";

@@ -1,5 +1,7 @@
-import { BiEditAlt, BiSave } from "react-icons/bi";
 import "./App.css";
+
+import { BiEditAlt, BiSave } from "react-icons/bi";
+
 import { IconContext } from "react-icons";
 
 type LoggerListNavProps = {

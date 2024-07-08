@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { CreateLogger } from "./CreateLogger";
 import { LoggerItem } from "./LoggerItem";
+import { LoggerListNav } from "./LoggerListNav";
 import { deleteLog } from "./dbManagement";
 import { useLoggerListContext } from "./LoggerListContext";
-import { LoggerListNav } from "./LoggerListNav";
+import { useState } from "react";
 
 export function LoggerList() {
   const [editMode, setEditMode] = useState(false);

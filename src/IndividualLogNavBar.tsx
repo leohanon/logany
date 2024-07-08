@@ -1,7 +1,8 @@
-import { IconContext } from "react-icons";
-import { useLoggerListContext } from "./LoggerListContext";
 import { BiEditAlt, BiSave } from "react-icons/bi";
+
+import { IconContext } from "react-icons";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { useLoggerListContext } from "./LoggerListContext";
 
 type LogNavBarProps = {
   logId: string;

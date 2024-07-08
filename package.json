@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "commandbar": "^1.12.0",
     "idb": "^8.0.0",
     "react": "^18.2.0",

@@ -1,11 +1,12 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { getLogItems } from "./dbManagement";
 import { useEffect, useState } from "react";
-import { LogItem } from "./LogTypes";
-import { LogItemDisplay } from "./LogItemDisplay";
-import { useLoggerListContext } from "./LoggerListContext";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { CreateLogger } from "./CreateLogger";
 import { IndividualLogNavBar } from "./IndividualLogNavBar";
+import { LogItem } from "./LogTypes";
+import { LogItemDisplay } from "./LogItemDisplay";
+import { getLogItems } from "./dbManagement";
+import { useLoggerListContext } from "./LoggerListContext";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();

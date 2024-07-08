@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import { useLoggerListContext } from "./LoggerListContext";
 import { CiViewList } from "react-icons/ci";
-import { PiLightningBold } from "react-icons/pi";
 import { FiEdit } from "react-icons/fi";
+import { PiLightningBold } from "react-icons/pi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useLoggerListContext } from "./LoggerListContext";
+import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {
   value: string;
