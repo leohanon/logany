@@ -1,6 +1,6 @@
 import { Box, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { useLoggerListContext } from "./LoggerListContext";
@@ -55,11 +55,7 @@ export function LoggerListItem({
               <ElectricBoltIcon fontSize="large" />
             </IconButton>
           )}
-          {editMode && (
-            <IconButton onClick={onDelete} color="warning">
-              <DeleteForeverIcon fontSize="large" />
-            </IconButton>
-          )}
+          {editMode && <DeleteButton onClick={onDelete} />}
         </Box>
       </Paper>
     </>

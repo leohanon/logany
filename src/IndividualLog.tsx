@@ -5,6 +5,7 @@ import { CreateLogger } from "./CreateLogger";
 import { IndividualLogItem } from "./IndividualLogItem";
 import { IndividualLogNavBar } from "./IndividualLogNavBar";
 import { LogItem } from "./LogTypes";
+import { Stack } from "@mui/material";
 import { getLogItems } from "./dbManagement";
 import { useLoggerListContext } from "./LoggerListContext";
 
@@ -48,7 +49,12 @@ export function IndividualLog() {
         handleGoHome={handleGoHome}
         handleToggle={handleToggle}
       />
-      <ul>
+      <Stack
+        direction={"column"}
+        justifyContent={"flex-start"}
+        alignItems={"stretch"}
+        spacing={1}
+      >
         {!editMode && (
           <CreateLogger
             onSubmit={(value: string) =>
@@ -61,7 +67,7 @@ export function IndividualLog() {
             <IndividualLogItem key={x.id} logItem={x} editMode={editMode} />
           );
         })}
-      </ul>
+      </Stack>
     </>
   );
 }

@@ -40,7 +40,7 @@ export function IndividualLogNavBar({
           </Toolbar>
         </AppBar>
       </Box>
-      <Box sx={{ height: 64 }} />
+      <Box sx={{ height: 48 }} />
     </>
   );
 }

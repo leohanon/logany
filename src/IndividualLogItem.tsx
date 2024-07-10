@@ -1,5 +1,7 @@
+import { Paper, Typography } from "@mui/material";
+
+import { DeleteButton } from "./DeleteButton";
 import { LogItem } from "./LogTypes";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { deleteLogItem } from "./dbManagement";
 import { formatDate } from "./helper";
 
@@ -15,13 +17,20 @@ export function IndividualLogItem({ logItem, editMode }: LogItemDisplayParams) {
   };
 
   return (
-    <li className="liLog">
-      {formatDate(timestamp)} - {note}
-      {editMode && (
-        <button className="liButton" onClick={handleDeleteLogItem}>
-          <RiDeleteBin6Line className="icon" />
-        </button>
-      )}
-    </li>
+    <Paper
+      elevation={3}
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: 1,
+        height: 56,
+      }}
+    >
+      <Typography>
+        {formatDate(timestamp)} - {note}
+      </Typography>
+      {editMode && <DeleteButton onClick={handleDeleteLogItem} />}
+    </Paper>
   );
 }

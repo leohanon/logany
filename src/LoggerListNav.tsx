@@ -32,7 +32,7 @@ export function LoggerListNav({
           </Toolbar>
         </AppBar>
       </Box>
-      <Box sx={{ height: 64 }} />
+      <Box sx={{ height: 48 }} />
     </>
   );
 }

@@ -30,7 +30,7 @@ export function CreateLogger({ onSubmit }: CreateLoggerProps) {
   return (
     <>
       {!editMode && (
-        <Button sx={{ height: 72 }} onClick={handleClick}>
+        <Button sx={{ height: 72, fontSize: "medium" }} onClick={handleClick}>
           + Create New
         </Button>
       )}
