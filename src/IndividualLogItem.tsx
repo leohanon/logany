@@ -1,13 +1,13 @@
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { LogItem } from "./LogTypes";
-import { formatDate } from "./helper";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { deleteLogItem } from "./dbManagement";
+import { formatDate } from "./helper";
 
 type LogItemDisplayParams = {
   logItem: LogItem;
   editMode: boolean;
 };
-export function LogItemDisplay({ logItem, editMode }: LogItemDisplayParams) {
+export function IndividualLogItem({ logItem, editMode }: LogItemDisplayParams) {
   const { timestamp, note } = logItem;
 
   const handleDeleteLogItem = () => {

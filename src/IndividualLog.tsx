@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { CreateLogger } from "./CreateLogger";
+import { IndividualLogItem } from "./IndividualLogItem";
 import { IndividualLogNavBar } from "./IndividualLogNavBar";
 import { LogItem } from "./LogTypes";
-import { LogItemDisplay } from "./LogItemDisplay";
 import { getLogItems } from "./dbManagement";
 import { useLoggerListContext } from "./LoggerListContext";
 
@@ -57,7 +57,9 @@ export function IndividualLog() {
           />
         )}
         {logItems.map((x) => {
-          return <LogItemDisplay key={x.id} logItem={x} editMode={editMode} />;
+          return (
+            <IndividualLogItem key={x.id} logItem={x} editMode={editMode} />
+          );
         })}
       </ul>
     </>

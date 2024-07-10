@@ -26,7 +26,7 @@ export function CreateLogger({ onSubmit }: CreateLoggerProps) {
   }, [editMode]);
 
   return (
-    <li>
+    <>
       {!editMode && (
         <button className="createButton" onClick={handleClick}>
           + Create New
@@ -43,6 +43,6 @@ export function CreateLogger({ onSubmit }: CreateLoggerProps) {
           />
         </form>
       )}
-    </li>
+    </>
   );
 }

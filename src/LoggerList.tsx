@@ -1,6 +1,7 @@
 import { CreateLogger } from "./CreateLogger";
-import { LoggerItem } from "./LoggerItem";
+import { LoggerListItem } from "./LoggerItem";
 import { LoggerListNav } from "./LoggerListNav";
+import { Stack } from "@mui/material";
 import { deleteLog } from "./dbManagement";
 import { useLoggerListContext } from "./LoggerListContext";
 import { useState } from "react";
@@ -25,10 +26,15 @@ export function LoggerList() {
   return (
     <>
       <LoggerListNav editMode={editMode} onToggleEditMode={toggleEditMode} />
-      <ul>
+      <Stack
+        direction={"column"}
+        justifyContent={"flex-start"}
+        alignItems={"stretch"}
+        spacing={1}
+      >
         {loggerList.map((x) => {
           return (
-            <LoggerItem
+            <LoggerListItem
               key={x.id}
               value={x.name}
               logId={x.id}
@@ -38,7 +44,7 @@ export function LoggerList() {
           );
         })}
         {!editMode && <CreateLogger onSubmit={handleAddLogList} />}
-      </ul>
+      </Stack>
     </>
   );
 }

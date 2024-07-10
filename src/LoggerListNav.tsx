@@ -1,8 +1,9 @@
 import "./App.css";
 
-import { BiEditAlt, BiSave } from "react-icons/bi";
+import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 
-import { IconContext } from "react-icons";
+import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
+import EditIcon from "@mui/icons-material/Edit";
 
 type LoggerListNavProps = {
   editMode: boolean;
@@ -14,17 +15,24 @@ export function LoggerListNav({
   onToggleEditMode,
 }: LoggerListNavProps) {
   return (
-    <div className="toolbar">
-      <div className="logo">Logg</div>
-      <button className="editButton" onClick={onToggleEditMode}>
-        <IconContext.Provider value={{ color: "white" }}>
-          {editMode ? (
-            <BiSave className="icon" />
-          ) : (
-            <BiEditAlt className="icon" />
-          )}
-        </IconContext.Provider>
-      </button>
-    </div>
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar>
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Logg
+            </Typography>
+            <IconButton onClick={onToggleEditMode}>
+              {editMode ? (
+                <DoneOutlineIcon fontSize="large" />
+              ) : (
+                <EditIcon fontSize="large" />
+              )}
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <Box sx={{ height: 64 }} />
+    </>
   );
 }

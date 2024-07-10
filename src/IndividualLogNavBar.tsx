@@ -1,7 +1,8 @@
-import { BiEditAlt, BiSave } from "react-icons/bi";
+import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 
-import { IconContext } from "react-icons";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
+import EditIcon from "@mui/icons-material/Edit";
 import { useLoggerListContext } from "./LoggerListContext";
 
 type LogNavBarProps = {
@@ -19,20 +20,27 @@ export function IndividualLogNavBar({
   const { loggerList } = useLoggerListContext();
 
   return (
-    <IconContext.Provider value={{ color: "white" }}>
-      <div className="toolbar">
-        <button className="editButton" onClick={handleGoHome}>
-          <IoMdArrowRoundBack className="icon" />
-        </button>
-        {logId && loggerList.find((x) => x.id == logId)?.name}
-        <button className="editButton" onClick={handleToggle}>
-          {editMode ? (
-            <BiSave className="icon" />
-          ) : (
-            <BiEditAlt className="icon" />
-          )}
-        </button>
-      </div>
-    </IconContext.Provider>
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar>
+          <Toolbar>
+            <IconButton onClick={handleGoHome}>
+              <ArrowBackIcon fontSize="large" />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              {logId && loggerList.find((x) => x.id == logId)?.name}
+            </Typography>
+            <IconButton onClick={handleToggle}>
+              {editMode ? (
+                <DoneOutlineIcon fontSize="large" />
+              ) : (
+                <EditIcon fontSize="large" />
+              )}
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <Box sx={{ height: 64 }} />
+    </>
   );
 }
