@@ -1,5 +1,5 @@
 import { CreateLogger } from "./CreateLogger";
-import { LoggerListItem } from "./LoggerItem";
+import { LoggerListItem } from "./LoggerListItem";
 import { LoggerListNav } from "./LoggerListNav";
 import { Stack } from "@mui/material";
 import { deleteLog } from "./dbManagement";

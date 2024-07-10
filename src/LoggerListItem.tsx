@@ -1,4 +1,4 @@
-import { IconButton, Paper, Tooltip, Typography } from "@mui/material";
+import { Box, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
@@ -27,10 +27,12 @@ export function LoggerListItem({
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           padding: 1,
+          height: 56,
         }}
       >
-        <div className="liInternal">
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           {!editMode && (
             <Tooltip title="View">
               <IconButton
@@ -41,8 +43,8 @@ export function LoggerListItem({
             </Tooltip>
           )}
           <Typography sx={{ marginLeft: 1 }}>{value}</Typography>
-        </div>
-        <div className="liInternal">
+        </Box>
+        <Box>
           {/* {!editMode && (
             <button className="customAddButton">
               <FiEdit className="icon" />
@@ -58,7 +60,7 @@ export function LoggerListItem({
               <DeleteForeverIcon fontSize="large" />
             </IconButton>
           )}
-        </div>
+        </Box>
       </Paper>
     </>
   );

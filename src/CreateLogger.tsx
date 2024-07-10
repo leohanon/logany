@@ -1,5 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 
+import { Button } from "@mui/material";
+
 type CreateLoggerProps = {
   onSubmit: (name: string) => void;
 };
@@ -28,9 +30,9 @@ export function CreateLogger({ onSubmit }: CreateLoggerProps) {
   return (
     <>
       {!editMode && (
-        <button className="createButton" onClick={handleClick}>
+        <Button sx={{ height: 72 }} onClick={handleClick}>
           + Create New
-        </button>
+        </Button>
       )}
       {editMode && (
         <form onSubmit={handleSubmit}>
