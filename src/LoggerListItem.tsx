@@ -4,6 +4,7 @@ import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import { Log } from "./LogTypes";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import { timeSince } from "./helper";
 import { useLoggerListContext } from "./LoggerListContext";
 import { useNavigate } from "react-router-dom";
 
@@ -37,8 +38,14 @@ export function LoggerListItem({ log, editMode, onDelete }: LoggerItemProps) {
               </IconButton>
             </Tooltip>
           )}
-          <Typography sx={{ marginLeft: 1 }}>{log.name}</Typography>
-          <Typography sx={{ marginLeft: 1 }}>{log.lastUpdated}</Typography>
+          <Typography variant="h6" sx={{ marginLeft: 1, fontSize: "large" }}>
+            {log.name}
+          </Typography>
+          {!editMode && (
+            <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
+              ({timeSince(log.lastUpdated)})
+            </Typography>
+          )}
         </Box>
         <Box>
           {/* {!editMode && (
