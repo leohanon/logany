@@ -1,13 +1,23 @@
+import { useEffect, useState } from "react";
+
 import { CreateLogger } from "./CreateLogger";
 import { LoggerListItem } from "./LoggerListItem";
 import { LoggerListNav } from "./LoggerListNav";
 import { Stack } from "@mui/material";
 import { deleteLog } from "./dbManagement";
 import { useLoggerListContext } from "./LoggerListContext";
-import { useState } from "react";
 
 export function LoggerList() {
   const [editMode, setEditMode] = useState(false);
+  const [renderPls, setRenderPls] = useState(0);
+
+  useEffect(() => {
+    const update = () => {
+      setRenderPls(Date.now());
+    };
+    const timerID = setInterval(update, 60000);
+    return () => clearInterval(timerID);
+  }, [renderPls]);
 
   const toggleEditMode = () => {
     setEditMode((oldMode) => {

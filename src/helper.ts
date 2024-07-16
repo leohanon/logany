@@ -10,8 +10,8 @@ export function formatDate(date: Date | string | number): string {
 export function timeSince(date: number): string {
   const seconds = Math.floor((Date.now() - date) / 1000);
 
-  if (seconds < 60) {
-    return "<1 min ago";
+  if (seconds < 120) {
+    return "<2 mins ago";
   } else if (seconds < 3600) {
     // Less than 60 minutes
     return `${Math.floor(seconds / 60)} mins ago`;
