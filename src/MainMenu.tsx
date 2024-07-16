@@ -1,8 +1,9 @@
-import { Outlet } from "react-router-dom";
-import { useCommandBar } from "./useCommandbar";
+// import { useCommandBar } from "./useCommandbar";
 import "./App.css";
 
+import { Outlet } from "react-router-dom";
+
 export function MainMenu() {
-  useCommandBar();
+  // useCommandBar();
   return <Outlet></Outlet>;
 }
