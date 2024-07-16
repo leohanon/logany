@@ -1,10 +1,12 @@
 import { Box, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 
+import { ConfirmButtons } from "./ConfirmButtons";
 import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { useLoggerListContext } from "./LoggerListContext";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 type LoggerItemProps = {
   value: string;
@@ -20,6 +22,7 @@ export function LoggerListItem({
 }: LoggerItemProps) {
   const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
+  const [confirmMode, setConfirmMode] = useState(false);
   return (
     <>
       <Paper
@@ -50,10 +53,25 @@ export function LoggerListItem({
               <FiEdit className="icon" />
             </button>
           )} */}
-          {!editMode && (
-            <IconButton onClick={() => handleAddToLog(logId, "")}>
+          {!editMode && !confirmMode && (
+            <IconButton
+              onClick={() => {
+                setConfirmMode(true);
+              }}
+            >
               <ElectricBoltIcon fontSize="large" />
             </IconButton>
+          )}
+          {!editMode && confirmMode && (
+            <ConfirmButtons
+              onConfirm={() => {
+                handleAddToLog(logId, "");
+                setConfirmMode(false);
+              }}
+              onCancel={() => {
+                setConfirmMode(false);
+              }}
+            />
           )}
           {editMode && <DeleteButton onClick={onDelete} />}
         </Box>
