@@ -50,6 +50,11 @@ export const getLogItems = async (logId: string) => {
   return items;
 };
 
+export const editLogItem = async (id: string, logItem: LogItem) => {
+  deleteLogItem(id);
+  addLogItem(logItem);
+};
+
 export const deleteLogItem = async (id: string) => {
   const db = await initDB();
   return db.delete(STORE_NAME, id);
