@@ -13,7 +13,6 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { Padding } from "@mui/icons-material";
 import { useLoggerListContext } from "./LoggerListContext";
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +28,7 @@ export function LoggerListItem({
   editMode,
   onDelete,
 }: LoggerItemProps) {
-  const { handleAddToLog } = useLoggerListContext();
+  const { handleAddToLog, handleMoveLogPosition } = useLoggerListContext();
   const navigate = useNavigate();
   return (
     <>
@@ -56,10 +55,22 @@ export function LoggerListItem({
             )}
             {editMode && (
               <Stack direction="row" spacing={1}>
-                <Button variant="outlined" sx={{ padding: "5px", minWidth: 0 }}>
+                <Button
+                  onClick={() => {
+                    handleMoveLogPosition(logId, -1);
+                  }}
+                  variant="outlined"
+                  sx={{ padding: "5px", minWidth: 0 }}
+                >
                   <ArrowDropUpIcon fontSize="large" />
                 </Button>
-                <Button variant="outlined" sx={{ padding: "5px", minWidth: 0 }}>
+                <Button
+                  onClick={() => {
+                    handleMoveLogPosition(logId, 1);
+                  }}
+                  variant="outlined"
+                  sx={{ padding: "5px", minWidth: 0 }}
+                >
                   <ArrowDropDownIcon fontSize="large" />
                 </Button>
               </Stack>
