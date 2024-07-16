@@ -30,7 +30,7 @@ export function IndividualLogItem({ logItem, editMode }: LogItemDisplayParams) {
       <Typography>
         {formatDate(timestamp)} - {note}
       </Typography>
-      {editMode && <DeleteButton onClick={handleDeleteLogItem} />}
+      {editMode && <DeleteButton onDelete={handleDeleteLogItem} />}
     </Paper>
   );
 }

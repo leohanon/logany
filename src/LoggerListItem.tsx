@@ -1,12 +1,11 @@
 import { Box, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 
-import { ConfirmButtons } from "./ConfirmButtons";
+import { ConfirmableButton } from "./ConfirmableButton";
 import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { useLoggerListContext } from "./LoggerListContext";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 type LoggerItemProps = {
   value: string;
@@ -22,7 +21,6 @@ export function LoggerListItem({
 }: LoggerItemProps) {
   const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
-  const [confirmMode, setConfirmMode] = useState(false);
   return (
     <>
       <Paper
@@ -48,32 +46,13 @@ export function LoggerListItem({
           <Typography sx={{ marginLeft: 1 }}>{value}</Typography>
         </Box>
         <Box>
-          {/* {!editMode && (
-            <button className="customAddButton">
-              <FiEdit className="icon" />
-            </button>
-          )} */}
-          {!editMode && !confirmMode && (
-            <IconButton
-              onClick={() => {
-                setConfirmMode(true);
-              }}
-            >
-              <ElectricBoltIcon fontSize="large" />
-            </IconButton>
-          )}
-          {!editMode && confirmMode && (
-            <ConfirmButtons
-              onConfirm={() => {
-                handleAddToLog(logId, "");
-                setConfirmMode(false);
-              }}
-              onCancel={() => {
-                setConfirmMode(false);
-              }}
+          {!editMode && (
+            <ConfirmableButton
+              onClick={() => handleAddToLog(logId, "")}
+              Icon={ElectricBoltIcon}
             />
           )}
-          {editMode && <DeleteButton onClick={onDelete} />}
+          {editMode && <DeleteButton onDelete={onDelete} />}
         </Box>
       </Paper>
     </>
