@@ -36,8 +36,7 @@ export function LoggerList() {
           return (
             <LoggerListItem
               key={x.id}
-              value={x.name}
-              logId={x.id}
+              log={x}
               onDelete={() => handleDelete(x.id)}
               editMode={editMode}
             />

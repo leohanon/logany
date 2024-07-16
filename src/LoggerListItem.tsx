@@ -2,22 +2,17 @@ import { Box, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 
 import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
+import { Log } from "./LogTypes";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { useLoggerListContext } from "./LoggerListContext";
 import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {
-  value: string;
-  logId: string;
+  log: Log;
   editMode: boolean;
   onDelete: () => void;
 };
-export function LoggerListItem({
-  value,
-  logId,
-  editMode,
-  onDelete,
-}: LoggerItemProps) {
+export function LoggerListItem({ log, editMode, onDelete }: LoggerItemProps) {
   const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
   return (
@@ -36,13 +31,14 @@ export function LoggerListItem({
           {!editMode && (
             <Tooltip title="View">
               <IconButton
-                onClick={() => navigate(`logs/${logId}`, { replace: true })}
+                onClick={() => navigate(`logs/${log.id}`, { replace: true })}
               >
                 <MenuOpenIcon fontSize="large" />
               </IconButton>
             </Tooltip>
           )}
-          <Typography sx={{ marginLeft: 1 }}>{value}</Typography>
+          <Typography sx={{ marginLeft: 1 }}>{log.name}</Typography>
+          <Typography sx={{ marginLeft: 1 }}>{log.lastUpdated}</Typography>
         </Box>
         <Box>
           {/* {!editMode && (
@@ -51,7 +47,7 @@ export function LoggerListItem({
             </button>
           )} */}
           {!editMode && (
-            <IconButton onClick={() => handleAddToLog(logId, "")}>
+            <IconButton onClick={() => handleAddToLog(log.id, "")}>
               <ElectricBoltIcon fontSize="large" />
             </IconButton>
           )}
