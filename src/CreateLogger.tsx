@@ -1,8 +1,7 @@
-import { Box, Button, IconButton, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
+import { ConfirmButtons } from "./ConfirmButtons";
 
 type CreateLoggerProps = {
   onSubmit: (name: string) => void;
@@ -47,16 +46,13 @@ export function CreateLogger({ onSubmit }: CreateLoggerProps) {
             onChange={(e) => setName(e.target.value)}
             fullWidth
           />
-          <IconButton
-            onClick={() => {
+          <ConfirmButtons
+            onConfirm={() => {}}
+            onCancel={() => {
               setEditMode(false);
+              setName("");
             }}
-          >
-            <ClearIcon fontSize="large" />
-          </IconButton>
-          <IconButton type="submit">
-            <CheckIcon fontSize="large" />
-          </IconButton>
+          />
         </form>
       )}
     </Box>
