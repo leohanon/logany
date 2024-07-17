@@ -1,7 +1,8 @@
+import { Button, Stack } from "@mui/material";
+
 import { CreateLogger } from "./CreateLogger";
 import { LoggerListItem } from "./LoggerListItem";
 import { LoggerListNav } from "./LoggerListNav";
-import { Stack } from "@mui/material";
 import { deleteLog } from "./dbManagement";
 import { useLoggerListContext } from "./LoggerListContext";
 import { useState } from "react";
@@ -23,6 +24,10 @@ export function LoggerList() {
     deleteLog(id);
   };
 
+  const handleClick = () => {
+    fetch("/.netlify/functions/create-new-log").then((x) => console.log(x));
+  };
+
   return (
     <>
       <LoggerListNav
@@ -35,6 +40,7 @@ export function LoggerList() {
         alignItems={"stretch"}
         spacing={1}
       >
+        <Button onClick={handleClick}>hello</Button>
         {loggerList.map((x) => {
           return (
             <LoggerListItem
