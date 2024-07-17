@@ -24,8 +24,14 @@ export function LoggerList() {
     deleteLog(id);
   };
 
-  const handleClick = () => {
+  const handleClick1 = () => {
     fetch("/.netlify/functions/create-new-log").then((x) => console.log(x));
+  };
+  const handleClick2 = () => {
+    fetch("/.netlify/functions/test_basic").then((x) => console.log(x));
+  };
+  const handleClick3 = () => {
+    fetch("/.netlify/functions/test_env_variable").then((x) => console.log(x));
   };
 
   return (
@@ -40,7 +46,9 @@ export function LoggerList() {
         alignItems={"stretch"}
         spacing={1}
       >
-        <Button onClick={handleClick}>hello</Button>
+        <Button onClick={handleClick1}>create row</Button>
+        <Button onClick={handleClick2}>basic test</Button>
+        <Button onClick={handleClick3}>env variable test</Button>
         {loggerList.map((x) => {
           return (
             <LoggerListItem
