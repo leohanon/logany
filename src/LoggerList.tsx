@@ -9,8 +9,9 @@ import { useLoggerListContext } from "./LoggerListContext";
 
 export function LoggerList() {
   const [editMode, setEditMode] = useState(false);
-  const [renderPls, setRenderPls] = useState(0);
 
+  // re-render the entire app once per minute to update the "last updated mins ago" text
+  const [renderPls, setRenderPls] = useState(0);
   useEffect(() => {
     const update = () => {
       setRenderPls(Date.now());
