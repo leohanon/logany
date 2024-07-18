@@ -6,12 +6,12 @@ import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import EditIcon from "@mui/icons-material/Edit";
 
 type LoggerListNavProps = {
-  editMode: boolean;
+  isEditMode: boolean;
   onToggleEditMode: () => void;
 };
 
 export function LoggerListNav({
-  editMode,
+  isEditMode,
   onToggleEditMode,
 }: LoggerListNavProps) {
   return (
@@ -23,7 +23,7 @@ export function LoggerListNav({
               Logg
             </Typography>
             <IconButton onClick={onToggleEditMode}>
-              {editMode ? (
+              {isEditMode ? (
                 <DoneOutlineIcon fontSize="large" />
               ) : (
                 <EditIcon fontSize="large" />

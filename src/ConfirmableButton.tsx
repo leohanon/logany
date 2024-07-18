@@ -22,22 +22,22 @@ export function ConfirmableButton({
   Icon,
   color,
 }: ConfirmableButtonProps) {
-  const [deleteMode, setDeleteMode] = useState(false);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
   return (
     <>
-      {!deleteMode && (
-        <IconButton onClick={() => setDeleteMode(true)} color={color}>
+      {!isDeleteMode && (
+        <IconButton onClick={() => setIsDeleteMode(true)} color={color}>
           <Icon fontSize="large" />
         </IconButton>
       )}
-      {deleteMode && (
+      {isDeleteMode && (
         <Stack direction={"row"} alignItems={"center"}>
           <ConfirmButtons
             onConfirm={() => {
               onClick();
-              setDeleteMode(false);
+              setIsDeleteMode(false);
             }}
-            onCancel={() => setDeleteMode(false)}
+            onCancel={() => setIsDeleteMode(false)}
           />
           <Icon fontSize="large" sx={{ width: "51px" }} />
         </Stack>

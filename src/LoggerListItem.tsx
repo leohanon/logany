@@ -10,13 +10,13 @@ import { useNavigate } from "react-router-dom";
 type LoggerItemProps = {
   value: string;
   logId: string;
-  editMode: boolean;
+  isEditMode: boolean;
   onDelete: () => void;
 };
 export function LoggerListItem({
   value,
   logId,
-  editMode,
+  isEditMode,
   onDelete,
 }: LoggerItemProps) {
   const { handleAddToLog } = useLoggerListContext();
@@ -34,7 +34,7 @@ export function LoggerListItem({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {!editMode && (
+          {!isEditMode && (
             <Tooltip title="View">
               <IconButton
                 onClick={() => navigate(`logs/${logId}`, { replace: true })}
@@ -46,13 +46,13 @@ export function LoggerListItem({
           <Typography sx={{ marginLeft: 1 }}>{value}</Typography>
         </Box>
         <Box>
-          {!editMode && (
+          {!isEditMode && (
             <ConfirmableButton
               onClick={() => handleAddToLog(logId, "")}
               Icon={ElectricBoltIcon}
             />
           )}
-          {editMode && <DeleteButton onDelete={onDelete} />}
+          {isEditMode && <DeleteButton onDelete={onDelete} />}
         </Box>
       </Paper>
     </>

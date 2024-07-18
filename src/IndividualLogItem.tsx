@@ -7,9 +7,12 @@ import { formatDate } from "./helper";
 
 type LogItemDisplayParams = {
   logItem: LogItem;
-  editMode: boolean;
+  isEditMode: boolean;
 };
-export function IndividualLogItem({ logItem, editMode }: LogItemDisplayParams) {
+export function IndividualLogItem({
+  logItem,
+  isEditMode,
+}: LogItemDisplayParams) {
   const { timestamp, note } = logItem;
 
   const handleDeleteLogItem = () => {
@@ -30,7 +33,7 @@ export function IndividualLogItem({ logItem, editMode }: LogItemDisplayParams) {
       <Typography>
         {formatDate(timestamp)} - {note}
       </Typography>
-      {editMode && <DeleteButton onDelete={handleDeleteLogItem} />}
+      {isEditMode && <DeleteButton onDelete={handleDeleteLogItem} />}
     </Paper>
   );
 }
