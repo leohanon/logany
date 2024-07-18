@@ -7,10 +7,10 @@ import { useLoggerListContext } from "./LoggerListContext";
 import { useState } from "react";
 
 export function LoggerList() {
-  const [editMode, setEditMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const toggleEditMode = () => {
-    setEditMode((oldMode) => {
+    setIsEditMode((oldMode) => {
       return !oldMode;
     });
   };
@@ -25,7 +25,10 @@ export function LoggerList() {
 
   return (
     <>
-      <LoggerListNav editMode={editMode} onToggleEditMode={toggleEditMode} />
+      <LoggerListNav
+        isEditMode={isEditMode}
+        onToggleEditMode={toggleEditMode}
+      />
       <Stack
         direction={"column"}
         justifyContent={"flex-start"}
@@ -38,11 +41,11 @@ export function LoggerList() {
               key={x.id}
               log={x}
               onDelete={() => handleDelete(x.id)}
-              editMode={editMode}
+              isEditMode={isEditMode}
             />
           );
         })}
-        {!editMode && <CreateLogger onSubmit={handleAddLogList} />}
+        {!isEditMode && <CreateLogger onSubmit={handleAddLogList} />}
       </Stack>
     </>
   );

@@ -1,5 +1,6 @@
 import { Box, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 
+import { ConfirmableButton } from "./ConfirmableButton";
 import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import { Log } from "./LogTypes";
@@ -10,10 +11,10 @@ import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {
   log: Log;
-  editMode: boolean;
+  isEditMode: boolean;
   onDelete: () => void;
 };
-export function LoggerListItem({ log, editMode, onDelete }: LoggerItemProps) {
+export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
   const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
   return (
@@ -29,7 +30,7 @@ export function LoggerListItem({ log, editMode, onDelete }: LoggerItemProps) {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {!editMode && (
+          {!isEditMode && (
             <Tooltip title="View">
               <IconButton
                 onClick={() => navigate(`logs/${log.id}`, { replace: true })}
@@ -41,24 +42,20 @@ export function LoggerListItem({ log, editMode, onDelete }: LoggerItemProps) {
           <Typography variant="h6" sx={{ marginLeft: 1, fontSize: "large" }}>
             {log.name}
           </Typography>
-          {!editMode && (
+          {!isEditMode && (
             <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
               <TimeSince lastUpdate={log.lastUpdated} />
             </Typography>
           )}
         </Box>
         <Box>
-          {/* {!editMode && (
-            <button className="customAddButton">
-              <FiEdit className="icon" />
-            </button>
-          )} */}
-          {!editMode && (
-            <IconButton onClick={() => handleAddToLog(log.id, "")}>
-              <ElectricBoltIcon fontSize="large" />
-            </IconButton>
+          {!isEditMode && (
+            <ConfirmableButton
+              onClick={() => handleAddToLog(log.id, "")}
+              Icon={ElectricBoltIcon}
+            />
           )}
-          {editMode && <DeleteButton onClick={onDelete} />}
+          {isEditMode && <DeleteButton onDelete={onDelete} />}
         </Box>
       </Paper>
     </>
