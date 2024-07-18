@@ -65,7 +65,7 @@ export function IndividualLogItem({
               seconds: null,
             }}
           />
-          <DeleteButton onClick={handleDeleteLogItem} />
+          <DeleteButton onDelete={handleDeleteLogItem} />
         </>
       )}
     </Paper>
