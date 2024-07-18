@@ -9,9 +9,12 @@ import { useState } from "react";
 
 type LogItemDisplayParams = {
   logItem: LogItem;
-  editMode: boolean;
+  isEditMode: boolean;
 };
-export function IndividualLogItem({ logItem, editMode }: LogItemDisplayParams) {
+export function IndividualLogItem({
+  logItem,
+  isEditMode,
+}: LogItemDisplayParams) {
   const { timestamp, note } = logItem;
   const [dateValue, setDateValue] = useState<Dayjs | null>(dayjs(timestamp));
 
@@ -32,12 +35,12 @@ export function IndividualLogItem({ logItem, editMode }: LogItemDisplayParams) {
         height: 56,
       }}
     >
-      {!editMode && (
+      {!isEditMode && (
         <Typography>
           {dayjs(timestamp).format(dateFormat)} - {note}
         </Typography>
       )}
-      {editMode && (
+      {isEditMode && (
         <>
           <DateTimePicker
             views={["month", "day", "hours", "minutes"]}
