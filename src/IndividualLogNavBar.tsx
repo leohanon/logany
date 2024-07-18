@@ -7,7 +7,7 @@ import { useLoggerListContext } from "./LoggerListContext";
 
 type LogNavBarProps = {
   logId: string;
-  editMode: boolean;
+  isEditMode: boolean;
   handleGoHome: () => void;
   handleToggle: () => void;
 };
@@ -15,7 +15,7 @@ export function IndividualLogNavBar({
   logId,
   handleGoHome,
   handleToggle,
-  editMode,
+  isEditMode: isEditMode,
 }: LogNavBarProps) {
   const { loggerList } = useLoggerListContext();
 
@@ -31,7 +31,7 @@ export function IndividualLogNavBar({
               {logId && loggerList.find((x) => x.id == logId)?.name}
             </Typography>
             <IconButton onClick={handleToggle}>
-              {editMode ? (
+              {isEditMode ? (
                 <DoneOutlineIcon fontSize="large" />
               ) : (
                 <EditIcon fontSize="large" />
