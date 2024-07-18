@@ -6,7 +6,7 @@ type timeSinceProps = {
   lastUpdate: number;
 };
 export function TimeSince({ lastUpdate }: timeSinceProps) {
-  // re-render the entire app once per minute to update the "last updated mins ago" text
+  // re-render the component once per minute to update the "last updated mins ago" text
   const [renderPls, setRenderPls] = useState(0);
   useEffect(() => {
     const update = () => {
