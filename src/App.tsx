@@ -1,9 +1,13 @@
 import "./App.css";
+
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { IndividualLog } from "./IndividualLog";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import { LoggerList } from "./LoggerList";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { MainMenu } from "./MainMenu";
 import { LoggerListContextProvider } from "./LoggerListContext";
+import { MainMenu } from "./MainMenu";
 
 const router = createBrowserRouter([
   {
@@ -25,9 +29,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <LoggerListContextProvider>
-      <RouterProvider router={router}></RouterProvider>
-    </LoggerListContextProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LoggerListContextProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </LoggerListContextProvider>
+    </LocalizationProvider>
   );
 }
 

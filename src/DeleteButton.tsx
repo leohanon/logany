@@ -1,13 +1,12 @@
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { IconButton } from "@mui/material";
+import { ConfirmableButton } from "./ConfirmableButton";
+import { DeleteForever } from "@mui/icons-material";
 
-type DeleteButtonProps = {
-  onClick: () => void;
-};
-export function DeleteButton({ onClick }: DeleteButtonProps) {
+export function DeleteButton({ onDelete }: { onDelete: () => void }) {
   return (
-    <IconButton onClick={onClick} color="warning">
-      <DeleteForeverIcon fontSize="large" />
-    </IconButton>
+    <ConfirmableButton
+      onClick={onDelete}
+      Icon={DeleteForever}
+      color="warning"
+    />
   );
 }

@@ -11,7 +11,7 @@ import { useLoggerListContext } from "./LoggerListContext";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
-  const [editMode, setEditMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [logItems, setLogItems] = useState<LogItem[]>([]);
   const { updateUid } = useLoggerListContext();
 
@@ -30,7 +30,7 @@ export function IndividualLog() {
   }, [logId, logItems, updateUid]);
 
   const handleToggle = () => {
-    setEditMode((oldMode) => !oldMode);
+    setIsEditMode((oldMode) => !oldMode);
   };
   const navigate = useNavigate();
   const handleGoHome = () => navigate("/", { replace: true });
@@ -45,7 +45,7 @@ export function IndividualLog() {
     <>
       <IndividualLogNavBar
         logId={logId ? logId : ""}
-        editMode={editMode}
+        isEditMode={isEditMode}
         handleGoHome={handleGoHome}
         handleToggle={handleToggle}
       />
@@ -55,7 +55,7 @@ export function IndividualLog() {
         alignItems={"stretch"}
         spacing={1}
       >
-        {!editMode && (
+        {!isEditMode && (
           <CreateLogger
             onSubmit={(value: string) =>
               handleAddToLog(logId ? logId : "", value)
@@ -64,7 +64,7 @@ export function IndividualLog() {
         )}
         {logItems.map((x) => {
           return (
-            <IndividualLogItem key={x.id} logItem={x} editMode={editMode} />
+            <IndividualLogItem key={x.id} logItem={x} isEditMode={isEditMode} />
           );
         })}
       </Stack>

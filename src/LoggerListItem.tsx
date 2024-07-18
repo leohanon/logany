@@ -10,6 +10,7 @@ import {
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { ConfirmableButton } from "./ConfirmableButton";
 import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
@@ -19,13 +20,13 @@ import { useNavigate } from "react-router-dom";
 type LoggerItemProps = {
   value: string;
   logId: string;
-  editMode: boolean;
+  isEditMode: boolean;
   onDelete: () => void;
 };
 export function LoggerListItem({
   value,
   logId,
-  editMode,
+  isEditMode,
   onDelete,
 }: LoggerItemProps) {
   const { handleAddToLog, handleMoveLogPosition } = useLoggerListContext();
@@ -44,7 +45,7 @@ export function LoggerListItem({
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            {!editMode && (
+            {!isEditMode && (
               <Tooltip title="View">
                 <IconButton
                   onClick={() => navigate(`logs/${logId}`, { replace: true })}
@@ -53,7 +54,7 @@ export function LoggerListItem({
                 </IconButton>
               </Tooltip>
             )}
-            {editMode && (
+            {isEditMode && (
               <Stack direction="row" spacing={1}>
                 <Button
                   onClick={() => {
@@ -79,17 +80,13 @@ export function LoggerListItem({
           </Stack>
         </Box>
         <Box>
-          {/* {!editMode && (
-            <button className="customAddButton">
-              <FiEdit className="icon" />
-            </button>
-          )} */}
-          {!editMode && (
-            <IconButton onClick={() => handleAddToLog(logId, "")}>
-              <ElectricBoltIcon fontSize="large" />
-            </IconButton>
+          {!isEditMode && (
+            <ConfirmableButton
+              onClick={() => handleAddToLog(logId, "")}
+              Icon={ElectricBoltIcon}
+            />
           )}
-          {editMode && <DeleteButton onClick={onDelete} />}
+          {isEditMode && <DeleteButton onDelete={onDelete} />}
         </Box>
       </Paper>
     </>
