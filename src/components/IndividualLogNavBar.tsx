@@ -3,7 +3,7 @@ import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import EditIcon from "@mui/icons-material/Edit";
-import { useLoggerListContext } from "../services/providers/LoggerListContext";
+import { useLoggerListContext } from "../hooks/useLoggerListContext";
 
 type LogNavBarProps = {
   logId: string;

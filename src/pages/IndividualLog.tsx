@@ -7,7 +7,7 @@ import { IndividualLogNavBar } from "../components/IndividualLogNavBar";
 import { LogItem } from "../utils/LogTypes";
 import { Stack } from "@mui/material";
 import { getLogItems } from "../services/dbManagement";
-import { useLoggerListContext } from "../services/providers/LoggerListContext";
+import { useLoggerListContext } from "../hooks/useLoggerListContext";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();

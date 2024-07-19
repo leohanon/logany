@@ -2,7 +2,6 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
-  useContext,
   useEffect,
   useState,
 } from "react";
@@ -26,7 +25,9 @@ type loggerListHook = {
   handleMoveLogPosition: (logId: string, direction: 1 | -1) => void;
 };
 
-const LoggerListContext = createContext<loggerListHook | undefined>(undefined);
+export const LoggerListContext = createContext<loggerListHook | undefined>(
+  undefined,
+);
 
 export function LoggerListContextProvider({
   children,
@@ -95,14 +96,4 @@ export function LoggerListContextProvider({
       {children}
     </LoggerListContext.Provider>
   );
-}
-
-export function useLoggerListContext() {
-  const context = useContext(LoggerListContext);
-  if (!context) {
-    throw new Error(
-      "useLoggerListContext must be used within a LoggerListContextProvider",
-    );
-  }
-  return context;
 }

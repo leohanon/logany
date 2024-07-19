@@ -14,7 +14,7 @@ import { ConfirmableButton } from "./ui/ConfirmableButton";
 import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { useLoggerListContext } from "../services/providers/LoggerListContext";
+import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {

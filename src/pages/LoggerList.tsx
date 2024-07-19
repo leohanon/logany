@@ -4,7 +4,7 @@ import { CreateLogger } from "../components/ui/CreateLogger";
 import { LoggerListItem } from "../components/LoggerListItem";
 import { LoggerListNav } from "../components/LoggerListNav";
 import { deleteLog } from "../services/dbManagement";
-import { useLoggerListContext } from "../services/providers/LoggerListContext";
+import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useState } from "react";
 
 export function LoggerList() {
