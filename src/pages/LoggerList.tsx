@@ -1,10 +1,10 @@
 import { Button, Stack } from "@mui/material";
 
-import { CreateLogger } from "./CreateLogger";
-import { LoggerListItem } from "./LoggerListItem";
-import { LoggerListNav } from "./LoggerListNav";
-import { deleteLog } from "./dbManagement";
-import { useLoggerListContext } from "./LoggerListContext";
+import { CreateLogger } from "../components/ui/CreateLogger";
+import { LoggerListItem } from "../components/LoggerListItem";
+import { LoggerListNav } from "../components/LoggerListNav";
+import { deleteLog } from "../services/dbManagement";
+import { useLoggerListContext } from "../services/providers/LoggerListContext";
 import { useState } from "react";
 
 export function LoggerList() {

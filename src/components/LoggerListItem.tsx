@@ -10,11 +10,11 @@ import {
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { ConfirmableButton } from "./ConfirmableButton";
-import { DeleteButton } from "./DeleteButton";
+import { ConfirmableButton } from "./ui/ConfirmableButton";
+import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { useLoggerListContext } from "./LoggerListContext";
+import { useLoggerListContext } from "../services/providers/LoggerListContext";
 import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {

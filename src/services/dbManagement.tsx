@@ -1,6 +1,6 @@
 import { DBSchema, IDBPDatabase, openDB } from "idb";
 
-import { LogItem } from "./LogTypes";
+import { LogItem } from "../utils/LogTypes";
 
 const DATABASE_NAME = "logsDatabase";
 const STORE_NAME = "logs";
@@ -15,7 +15,7 @@ interface MyDB extends DBSchema {
 }
 
 let dbInstance: IDBPDatabase<MyDB> | null = null;
-export const initDB = async () => {
+const initDB = async () => {
   if (dbInstance) {
     return dbInstance;
   }

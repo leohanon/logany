@@ -1,36 +1,26 @@
 import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import EditIcon from "@mui/icons-material/Edit";
-import { useLoggerListContext } from "./LoggerListContext";
 
-type LogNavBarProps = {
-  logId: string;
+type LoggerListNavProps = {
   isEditMode: boolean;
-  handleGoHome: () => void;
-  handleToggle: () => void;
+  onToggleEditMode: () => void;
 };
-export function IndividualLogNavBar({
-  logId,
-  handleGoHome,
-  handleToggle,
-  isEditMode: isEditMode,
-}: LogNavBarProps) {
-  const { loggerList } = useLoggerListContext();
 
+export function LoggerListNav({
+  isEditMode,
+  onToggleEditMode,
+}: LoggerListNavProps) {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar>
           <Toolbar>
-            <IconButton onClick={handleGoHome}>
-              <ArrowBackIcon fontSize="large" />
-            </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {logId && loggerList.find((x) => x.id == logId)?.name}
+              Logg
             </Typography>
-            <IconButton onClick={handleToggle}>
+            <IconButton onClick={onToggleEditMode}>
               {isEditMode ? (
                 <DoneOutlineIcon fontSize="large" />
               ) : (

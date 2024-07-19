@@ -7,8 +7,8 @@ import {
   useState,
 } from "react";
 
-import { Log } from "./LogTypes";
-import { addLogItem } from "./dbManagement";
+import { Log } from "../../utils/LogTypes";
+import { addLogItem } from "../dbManagement";
 
 export type logger = {
   id: string;

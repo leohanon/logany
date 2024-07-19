@@ -1,10 +1,10 @@
 import { DateTimePicker, renderTimeViewClock } from "@mui/x-date-pickers";
 import { Paper, Typography } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
-import { deleteLogItem, editLogItem } from "./dbManagement";
+import { deleteLogItem, editLogItem } from "../services/dbManagement";
 
-import { DeleteButton } from "./DeleteButton";
-import { LogItem } from "./LogTypes";
+import { DeleteButton } from "./ui/DeleteButton";
+import { LogItem } from "../utils/LogTypes";
 import { useState } from "react";
 
 type LogItemDisplayParams = {

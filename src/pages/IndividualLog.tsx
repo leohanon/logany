@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { CreateLogger } from "./CreateLogger";
-import { IndividualLogItem } from "./IndividualLogItem";
-import { IndividualLogNavBar } from "./IndividualLogNavBar";
-import { LogItem } from "./LogTypes";
+import { CreateLogger } from "../components/ui/CreateLogger";
+import { IndividualLogItem } from "../components/IndividualLogItem";
+import { IndividualLogNavBar } from "../components/IndividualLogNavBar";
+import { LogItem } from "../utils/LogTypes";
 import { Stack } from "@mui/material";
-import { getLogItems } from "./dbManagement";
-import { useLoggerListContext } from "./LoggerListContext";
+import { getLogItems } from "../services/dbManagement";
+import { useLoggerListContext } from "../services/providers/LoggerListContext";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
