@@ -54,7 +54,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
               <Stack direction="row" spacing={1}>
                 <Button
                   onClick={() => {
-                    handleMoveLogPosition(logId, -1);
+                    handleMoveLogPosition(log.id, -1);
                   }}
                   variant="outlined"
                   sx={{ padding: "5px", minWidth: 0 }}
@@ -63,7 +63,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
                 </Button>
                 <Button
                   onClick={() => {
-                    handleMoveLogPosition(logId, 1);
+                    handleMoveLogPosition(log.id, 1);
                   }}
                   variant="outlined"
                   sx={{ padding: "5px", minWidth: 0 }}
@@ -73,14 +73,14 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
               </Stack>
             )}
             <Typography variant="h6" sx={{ marginLeft: 1, fontSize: "large" }}>
-            {log.name}
-          </Typography>
-          {!isEditMode && (
-            <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
-              <TimeSince lastUpdate={log.lastUpdated} />
+              {log.name}
             </Typography>
+            {!isEditMode && (
+              <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
+                <TimeSince lastUpdate={log.lastUpdated} />
+              </Typography>
+            )}
           </Stack>
-          )}
         </Box>
         <Box>
           {!isEditMode && (
