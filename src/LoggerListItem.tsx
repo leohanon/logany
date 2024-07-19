@@ -13,22 +13,18 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { ConfirmableButton } from "./ConfirmableButton";
 import { DeleteButton } from "./DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
+import { Log } from "./LogTypes";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import { TimeSince } from "./TimeSince";
 import { useLoggerListContext } from "./LoggerListContext";
 import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {
-  value: string;
-  logId: string;
+  log: Log;
   isEditMode: boolean;
   onDelete: () => void;
 };
-export function LoggerListItem({
-  value,
-  logId,
-  isEditMode,
-  onDelete,
-}: LoggerItemProps) {
+export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
   const { handleAddToLog, handleMoveLogPosition } = useLoggerListContext();
   const navigate = useNavigate();
   return (
@@ -48,7 +44,7 @@ export function LoggerListItem({
             {!isEditMode && (
               <Tooltip title="View">
                 <IconButton
-                  onClick={() => navigate(`logs/${logId}`, { replace: true })}
+                  onClick={() => navigate(`logs/${log.id}`, { replace: true })}
                 >
                   <MenuOpenIcon fontSize="large" />
                 </IconButton>
@@ -76,13 +72,20 @@ export function LoggerListItem({
                 </Button>
               </Stack>
             )}
-            <Typography sx={{ marginLeft: 1 }}>{value}</Typography>
+            <Typography variant="h6" sx={{ marginLeft: 1, fontSize: "large" }}>
+            {log.name}
+          </Typography>
+          {!isEditMode && (
+            <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
+              <TimeSince lastUpdate={log.lastUpdated} />
+            </Typography>
           </Stack>
+          )}
         </Box>
         <Box>
           {!isEditMode && (
             <ConfirmableButton
-              onClick={() => handleAddToLog(logId, "")}
+              onClick={() => handleAddToLog(log.id, "")}
               Icon={ElectricBoltIcon}
             />
           )}

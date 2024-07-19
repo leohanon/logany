@@ -8,4 +8,5 @@ export interface LogItem {
 export interface Log {
   id: string;
   name: string;
+  lastUpdated: number;
 }

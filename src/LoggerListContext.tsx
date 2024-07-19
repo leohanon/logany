@@ -10,15 +10,10 @@ import {
 import { Log } from "./LogTypes";
 import { addLogItem } from "./dbManagement";
 
-export type logger = {
-  id: string;
-  name: string;
-};
-
 type loggerListHook = {
   loggerList: Log[];
   updateUid: string;
-  setLoggerList: Dispatch<SetStateAction<logger[]>>;
+  setLoggerList: Dispatch<SetStateAction<Log[]>>;
   handleAddLogList: (name: string) => void;
   handleAddToLog: (logId: string, message: string) => void;
   activeLogId: string;
@@ -48,7 +43,11 @@ export function LoggerListContextProvider({
   }, [loggerList]);
 
   const handleAddLogList = (name: string) => {
-    const newLog = { id: crypto.randomUUID(), name: name };
+    const newLog = {
+      id: crypto.randomUUID(),
+      name: name,
+      lastUpdated: Date.now(),
+    };
     setLoggerList((oldList) => [...oldList, newLog]);
   };
 
@@ -60,6 +59,11 @@ export function LoggerListContextProvider({
       note: message,
     };
     addLogItem(logItem);
+    setLoggerList((oldList) =>
+      oldList.map((x) =>
+        x.id === logId ? { ...x, lastUpdated: Date.now() } : x,
+      ),
+    );
     setUpdateUid(crypto.randomUUID());
   };
 
