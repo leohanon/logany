@@ -18,6 +18,7 @@ type loggerListHook = {
   handleAddToLog: (logId: string, message: string) => void;
   activeLogId: string;
   setActiveLogId: Dispatch<SetStateAction<string>>;
+  handleMoveLogPosition: (logId: string, direction: 1 | -1) => void;
 };
 
 const LoggerListContext = createContext<loggerListHook | undefined>(undefined);
@@ -66,6 +67,22 @@ export function LoggerListContextProvider({
     setUpdateUid(crypto.randomUUID());
   };
 
+  const handleMoveLogPosition = (logId: string, direction: 1 | -1) => {
+    const index = loggerList.findIndex((x) => x.id === logId);
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= loggerList.length) {
+      return;
+    }
+
+    const copy = [...loggerList];
+
+    const item = copy[index];
+    copy[index] = copy[newIndex];
+    copy[newIndex] = item;
+
+    setLoggerList(copy);
+  };
+
   return (
     <LoggerListContext.Provider
       value={{
@@ -76,6 +93,7 @@ export function LoggerListContextProvider({
         handleAddToLog,
         activeLogId,
         setActiveLogId,
+        handleMoveLogPosition,
       }}
     >
       {children}
