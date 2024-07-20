@@ -1,5 +1,6 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 
+import { BaseNav } from "./BaseNav";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -13,24 +14,17 @@ export function LoggerListNav({
   onToggleEditMode,
 }: LoggerListNavProps) {
   return (
-    <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar>
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Logg
-            </Typography>
-            <IconButton onClick={onToggleEditMode}>
-              {isEditMode ? (
-                <DoneOutlineIcon fontSize="large" />
-              ) : (
-                <EditIcon fontSize="large" />
-              )}
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-      </Box>
-      <Box sx={{ height: 48 }} />
-    </>
+    <BaseNav>
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        Logg
+      </Typography>
+      <IconButton onClick={onToggleEditMode}>
+        {isEditMode ? (
+          <DoneOutlineIcon fontSize="large" />
+        ) : (
+          <EditIcon fontSize="large" />
+        )}
+      </IconButton>
+    </BaseNav>
   );
 }

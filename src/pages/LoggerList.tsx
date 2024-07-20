@@ -1,8 +1,7 @@
-import { Button, Stack } from "@mui/material";
-
 import { CreateLogger } from "../components/ui/CreateLogger";
 import { LoggerListItem } from "../components/LoggerListItem";
 import { LoggerListNav } from "../components/LoggerListNav";
+import { Stack } from "@mui/material";
 import { deleteLog } from "../services/dbManagement";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useState } from "react";
@@ -23,17 +22,6 @@ export function LoggerList() {
     setLoggerList((oldList) => oldList.filter((x) => x.id != id));
     deleteLog(id);
   };
-
-  const handleClick1 = () => {
-    fetch("/.netlify/functions/create-new-log").then((x) => console.log(x));
-  };
-  const handleClick2 = () => {
-    fetch("/.netlify/functions/test_basic").then((x) => console.log(x));
-  };
-  const handleClick3 = () => {
-    fetch("/.netlify/functions/test_env_variable").then((x) => console.log(x));
-  };
-
   return (
     <>
       <LoggerListNav
@@ -46,9 +34,6 @@ export function LoggerList() {
         alignItems={"stretch"}
         spacing={1}
       >
-        <Button onClick={handleClick1}>create row</Button>
-        <Button onClick={handleClick2}>basic test</Button>
-        <Button onClick={handleClick3}>env variable test</Button>
         {loggerList.map((x) => {
           return (
             <LoggerListItem

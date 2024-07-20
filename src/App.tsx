@@ -5,12 +5,20 @@ import { IndividualLog } from "./pages/IndividualLog";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { LoggerList } from "./pages/LoggerList";
 import { LoggerListContextProvider } from "./services/providers/LoggerListContext";
+import Login from "./pages/Login";
 import { MainMenu } from "./pages/MainMenu";
+import RequireAuth from "./components/RequireAuth";
+import Signup from "./pages/Signup";
+import TestPage from "./pages/testing";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainMenu />,
+    element: (
+      <RequireAuth>
+        <MainMenu />
+      </RequireAuth>
+    ),
     errorElement: <div>404 Not Found</div>,
     children: [
       {
@@ -23,6 +31,9 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "/signup", element: <Signup /> },
+  { path: "/login", element: <Login /> },
+  { path: "/test", element: <TestPage /> },
 ]);
 
 function App() {
