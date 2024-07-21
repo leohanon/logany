@@ -62,12 +62,7 @@ export const deleteLogItem = async (id: string) => {
 };
 
 export const deleteLog = async (logId: string) => {
-  const db = await initDB();
-  const transaction = db.transaction(STORE_NAME);
-  const logIndexed = transaction.store.index("byLog");
-  return (await logIndexed.getAll(logId)).map((x) =>
-    db.delete(STORE_NAME, x.id),
-  );
+  return supabase.from("logs").delete().eq("uuid", logId);
 };
 
 export const getCount = async (logId: string) => {

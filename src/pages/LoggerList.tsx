@@ -1,4 +1,8 @@
-import { createNewLog, fetchAllUserLogs } from "../services/dbManagement";
+import {
+  createNewLog,
+  deleteLog,
+  fetchAllUserLogs,
+} from "../services/dbManagement";
 import { useCallback, useEffect, useState } from "react";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
@@ -45,6 +49,11 @@ export function LoggerList() {
     await fetchLogs();
   };
 
+  const handleDeleteLog = async (logUuid: string) => {
+    await deleteLog(logUuid);
+    await fetchLogs();
+  };
+
   return (
     <>
       <LoggerListNav
@@ -63,7 +72,7 @@ export function LoggerList() {
               key={x.uuid}
               value={x.name}
               logId={x.uuid}
-              onDelete={() => {}}
+              onDelete={() => handleDeleteLog(x.uuid)}
               isEditMode={isEditMode}
             />
           );
