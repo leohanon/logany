@@ -1,6 +1,7 @@
 import { DBSchema, IDBPDatabase, openDB } from "idb";
 
 import { LogItem } from "../utils/LogTypes";
+import { supabase } from "./supabase";
 
 const DATABASE_NAME = "logsDatabase";
 const STORE_NAME = "logs";
@@ -74,4 +75,33 @@ export const getCount = async (logId: string) => {
   const transaction = db.transaction(STORE_NAME);
   const logIndexed = transaction.store.index("byLog");
   return logIndexed.count(logId);
+};
+
+export const createNewLog = async (logName: string, user_uuid: string) => {
+  try {
+    const uuid = crypto.randomUUID();
+    console.log(uuid);
+
+    const { error: logError } = await supabase
+      .from("logs")
+      .insert({ name: logName, uuid });
+
+    if (logError) {
+      throw logError;
+    }
+
+    const { error: permissionError } = await supabase
+      .from("log_permissions")
+      .insert({
+        log_uuid: uuid,
+        user_uuid: user_uuid,
+        access_level: "OWNER",
+      });
+
+    if (permissionError) {
+      throw permissionError;
+    }
+  } catch (error) {
+    console.error("Error adding log list:", error);
+  }
 };

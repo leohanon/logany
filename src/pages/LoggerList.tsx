@@ -1,13 +1,19 @@
+import { useEffect, useState } from "react";
+
 import { CreateLogger } from "../components/ui/CreateLogger";
+import { Database } from "../../database.types";
 import { LoggerListItem } from "../components/LoggerListItem";
 import { LoggerListNav } from "../components/LoggerListNav";
 import { Stack } from "@mui/material";
-import { deleteLog } from "../services/dbManagement";
-import { useLoggerListContext } from "../hooks/useLoggerListContext";
-import { useState } from "react";
+import { createNewLog } from "../services/dbManagement";
+import { supabase } from "../services/supabase";
+import { useAuth } from "../hooks/useAuth";
+
+type LogRow = Database["public"]["Tables"]["logs"]["Row"];
 
 export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);
+  const session = useAuth();
 
   const toggleEditMode = () => {
     setIsEditMode((oldMode) => {
@@ -15,13 +21,26 @@ export function LoggerList() {
     });
   };
 
-  const { loggerList, setLoggerList, handleAddLogList } =
-    useLoggerListContext();
+  const fetchLogs = async () => {
+    const { data, error } = await supabase.from("logs").select();
 
-  const handleDelete = (id: string) => {
-    setLoggerList((oldList) => oldList.filter((x) => x.id != id));
-    deleteLog(id);
+    if (error) {
+      console.error("Error fetching logs:", error);
+    } else {
+      setLoggerList(data);
+    }
   };
+
+  const handleAddLogList = async (logName: string) => {
+    await createNewLog(logName, session?.user.id ?? "");
+    await fetchLogs();
+  };
+
+  const [loggerList, setLoggerList] = useState<LogRow[] | null>([]);
+  useEffect(() => {
+    fetchLogs();
+  }, []);
+
   return (
     <>
       <LoggerListNav
@@ -34,13 +53,13 @@ export function LoggerList() {
         alignItems={"stretch"}
         spacing={1}
       >
-        {loggerList.map((x) => {
+        {loggerList?.map((x) => {
           return (
             <LoggerListItem
-              key={x.id}
+              key={x.uuid}
               value={x.name}
-              logId={x.id}
-              onDelete={() => handleDelete(x.id)}
+              logId={x.uuid}
+              onDelete={() => {}}
               isEditMode={isEditMode}
             />
           );
