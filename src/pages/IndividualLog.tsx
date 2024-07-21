@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CreateLogger } from "../components/ui/CreateLogger";
 import { IndividualLogItem } from "../components/IndividualLogItem";
 import { IndividualLogNavBar } from "../components/IndividualLogNavBar";
-import { LogItem } from "../utils/LogTypes";
+import { LogItemRow } from "../../database.types";
 import { Stack } from "@mui/material";
 import { getLogItems } from "../services/dbManagement";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
@@ -12,7 +12,7 @@ import { useLoggerListContext } from "../hooks/useLoggerListContext";
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
   const [isEditMode, setIsEditMode] = useState(false);
-  const [logItems, setLogItems] = useState<LogItem[]>([]);
+  const [logItems, setLogItems] = useState<LogItemRow[] | null>([]);
   const { updateUid } = useLoggerListContext();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function IndividualLog() {
       try {
         const promise = getLogItems(logId ? logId : "");
         const items = await promise;
-        setLogItems(items);
+        setLogItems(items.data);
       } catch (error) {
         console.error("Failed to fetch log items:", error);
       }
@@ -62,9 +62,13 @@ export function IndividualLog() {
             }
           />
         )}
-        {logItems.map((x) => {
+        {logItems?.map((x) => {
           return (
-            <IndividualLogItem key={x.id} logItem={x} isEditMode={isEditMode} />
+            <IndividualLogItem
+              key={x.uuid}
+              logItem={x}
+              isEditMode={isEditMode}
+            />
           );
         })}
       </Stack>

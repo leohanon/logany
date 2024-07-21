@@ -6,13 +6,11 @@ import {
 import { useCallback, useEffect, useState } from "react";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
-import { Database } from "../../database.types";
+import { LogRow } from "../../database.types";
 import { LoggerListItem } from "../components/LoggerListItem";
 import { LoggerListNav } from "../components/LoggerListNav";
 import { Stack } from "@mui/material";
 import { useAuth } from "../hooks/useAuth";
-
-type LogRow = Database["public"]["Tables"]["logs"]["Row"];
 
 export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);

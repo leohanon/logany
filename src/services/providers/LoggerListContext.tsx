@@ -55,9 +55,7 @@ export function LoggerListContextProvider({
 
   const handleAddToLog = (logId: string, message: string) => {
     const logItem = {
-      id: Date.now().toString(),
-      logId: logId,
-      timestamp: Date.now(),
+      log_uuid: logId,
       note: message,
     };
     addLogItem(logItem);

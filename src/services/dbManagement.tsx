@@ -1,6 +1,7 @@
 import { DBSchema, IDBPDatabase, openDB } from "idb";
 
 import { LogItem } from "../utils/LogTypes";
+import { LogItemInsert } from "../../database.types";
 import { supabase } from "./supabase";
 
 const DATABASE_NAME = "logsDatabase";
@@ -31,34 +32,34 @@ const initDB = async () => {
   return dbInstance;
 };
 
-export const addLogItem = async (logItem: LogItem) => {
-  const db = await initDB();
-  return db.add(STORE_NAME, logItem);
+export const addLogItem = async (logItem: LogItemInsert) => {
+  try {
+    const uuid = crypto.randomUUID();
+    console.log(uuid);
+
+    const { error: logError } = await supabase
+      .from("log_items")
+      .insert(logItem);
+
+    if (logError) {
+      throw logError;
+    }
+  } catch (error) {
+    console.error("Error adding log list:", error);
+  }
 };
 
 export const getLogItems = async (logId: string) => {
-  const db = await initDB();
-  const transaction = db.transaction(STORE_NAME, "readonly");
-  const logIndexed = transaction.store.index("byLog");
-  let cursor = await logIndexed.openCursor(logId, "prev");
-  const items = [];
-  while (cursor) {
-    items.push(cursor.value);
-    cursor = await cursor.continue(); // Move to the next item in the index
-  }
-
-  await transaction.done; // Ensure the transaction is completed before returning
-  return items;
+  return supabase.from("log_items").select().eq("log_uuid", logId);
 };
 
-export const editLogItem = async (id: string, logItem: LogItem) => {
+export const editLogItem = async (id: string, logItem: LogItemInsert) => {
   deleteLogItem(id);
   addLogItem(logItem);
 };
 
 export const deleteLogItem = async (id: string) => {
-  const db = await initDB();
-  return db.delete(STORE_NAME, id);
+  return supabase.from("logs").delete().eq("uuid", logId);
 };
 
 export const deleteLog = async (logId: string) => {

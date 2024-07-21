@@ -4,22 +4,22 @@ import dayjs, { Dayjs } from "dayjs";
 import { deleteLogItem, editLogItem } from "../services/dbManagement";
 
 import { DeleteButton } from "./ui/DeleteButton";
-import { LogItem } from "../utils/LogTypes";
+import { LogItemRow } from "../../database.types";
 import { useState } from "react";
 
 type LogItemDisplayParams = {
-  logItem: LogItem;
+  logItem: LogItemRow;
   isEditMode: boolean;
 };
 export function IndividualLogItem({
   logItem,
   isEditMode,
 }: LogItemDisplayParams) {
-  const { timestamp, note } = logItem;
-  const [dateValue, setDateValue] = useState<Dayjs | null>(dayjs(timestamp));
+  const { created_at, note } = logItem;
+  const [dateValue, setDateValue] = useState<Dayjs | null>(dayjs(created_at));
 
   const handleDeleteLogItem = () => {
-    deleteLogItem(timestamp.toString());
+    deleteLogItem(created_at.toString());
   };
 
   const dateFormat = "M/DD - h:mm A";
@@ -37,7 +37,7 @@ export function IndividualLogItem({
     >
       {!isEditMode && (
         <Typography>
-          {dayjs(timestamp).format(dateFormat)} - {note}
+          {dayjs(created_at).format(dateFormat)} - {note}
         </Typography>
       )}
       {isEditMode && (
@@ -52,10 +52,10 @@ export function IndividualLogItem({
               setDateValue(newValue);
             }}
             onAccept={(newValue) => {
-              editLogItem(timestamp.toString(), {
+              editLogItem(created_at.toString(), {
                 timestamp: newValue ? newValue.valueOf() : 0,
                 id: newValue ? newValue.valueOf().toString() : "0",
-                logId: logItem.logId,
+                logId: logItem.uuid,
                 note: logItem.note,
               });
             }}
