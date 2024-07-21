@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   IconButton,
   Paper,
   Stack,
@@ -8,8 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { ConfirmableButton } from "./ui/ConfirmableButton";
 import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
@@ -29,7 +26,7 @@ export function LoggerListItem({
   isEditMode,
   onDelete,
 }: LoggerItemProps) {
-  const { handleAddToLog, handleMoveLogPosition } = useLoggerListContext();
+  const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
   return (
     <>
@@ -56,7 +53,7 @@ export function LoggerListItem({
             )}
             {isEditMode && (
               <Stack direction="row" spacing={1}>
-                <Button
+                {/* <Button
                   onClick={() => {
                     handleMoveLogPosition(logId, -1);
                   }}
@@ -73,7 +70,7 @@ export function LoggerListItem({
                   sx={{ padding: "5px", minWidth: 0 }}
                 >
                   <ArrowDropDownIcon fontSize="large" />
-                </Button>
+                </Button> */}
               </Stack>
             )}
             <Typography sx={{ marginLeft: 1 }}>{value}</Typography>
