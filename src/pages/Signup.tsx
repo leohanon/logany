@@ -3,7 +3,7 @@ import { Form, Link } from "react-router-dom";
 import { FormEvent, useRef, useState } from "react";
 
 import RequireAnon from "../components/RequireAnon";
-import { supabase } from "../services/supabase";
+import { supabase } from "../services/dbManagement";
 
 export default function Signup() {
   const emailRef = useRef<HTMLInputElement>(null);

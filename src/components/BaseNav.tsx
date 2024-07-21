@@ -12,7 +12,7 @@ import { ReactNode, useState } from "react";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { supabase } from "../services/supabase";
+import { supabase } from "../services/dbManagement";
 
 type BaseNavProps = {
   children: ReactNode;
