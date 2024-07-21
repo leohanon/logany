@@ -14,6 +14,10 @@ type LogRow = Database["public"]["Tables"]["logs"]["Row"];
 export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);
   const session = useAuth();
+  const [loggerList, setLoggerList] = useState<LogRow[] | null>([]);
+  useEffect(() => {
+    fetchLogs();
+  }, []);
 
   const toggleEditMode = () => {
     setIsEditMode((oldMode) => {
@@ -35,11 +39,6 @@ export function LoggerList() {
     await createNewLog(logName, session?.user.id ?? "");
     await fetchLogs();
   };
-
-  const [loggerList, setLoggerList] = useState<LogRow[] | null>([]);
-  useEffect(() => {
-    fetchLogs();
-  }, []);
 
   return (
     <>
