@@ -107,6 +107,7 @@ export const createNewLog = async (logName: string, user_uuid: string) => {
 };
 
 export const fetchAllUserLogs = async (user_uuid: string) => {
+  console.log("fetching logs");
   return supabase
     .from("logs")
     .select("*, log_permissions(*)")

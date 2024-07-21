@@ -22,7 +22,7 @@ export function LoggerList() {
   };
 
   const fetchLogs = useCallback(async () => {
-    if (!session) {
+    if (!session?.user.id) {
       return;
     }
     const { data, error } = await fetchAllUserLogs(session.user.id);
@@ -31,7 +31,7 @@ export function LoggerList() {
     } else {
       setLoggerList(data);
     }
-  }, [session]);
+  }, [session?.user.id]);
 
   useEffect(() => {
     fetchLogs();
