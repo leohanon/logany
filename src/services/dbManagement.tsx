@@ -105,3 +105,10 @@ export const createNewLog = async (logName: string, user_uuid: string) => {
     console.error("Error adding log list:", error);
   }
 };
+
+export const fetchAllUserLogs = async (user_uuid: string) => {
+  return supabase
+    .from("logs")
+    .select("*, log_permissions(*)")
+    .eq("log_permissions.user_uuid", user_uuid);
+};

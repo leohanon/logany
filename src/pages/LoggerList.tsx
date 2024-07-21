@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { createNewLog, fetchAllUserLogs } from "../services/dbManagement";
+import { useCallback, useEffect, useState } from "react";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
 import { Database } from "../../database.types";
 import { LoggerListItem } from "../components/LoggerListItem";
 import { LoggerListNav } from "../components/LoggerListNav";
 import { Stack } from "@mui/material";
-import { createNewLog } from "../services/dbManagement";
-import { supabase } from "../services/supabase";
 import { useAuth } from "../hooks/useAuth";
 
 type LogRow = Database["public"]["Tables"]["logs"]["Row"];
@@ -15,9 +14,6 @@ export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);
   const session = useAuth();
   const [loggerList, setLoggerList] = useState<LogRow[] | null>([]);
-  useEffect(() => {
-    fetchLogs();
-  }, []);
 
   const toggleEditMode = () => {
     setIsEditMode((oldMode) => {
@@ -25,18 +21,27 @@ export function LoggerList() {
     });
   };
 
-  const fetchLogs = async () => {
-    const { data, error } = await supabase.from("logs").select();
-
+  const fetchLogs = useCallback(async () => {
+    if (!session) {
+      return;
+    }
+    const { data, error } = await fetchAllUserLogs(session.user.id);
     if (error) {
       console.error("Error fetching logs:", error);
     } else {
       setLoggerList(data);
     }
-  };
+  }, [session]);
+
+  useEffect(() => {
+    fetchLogs();
+  }, [fetchLogs]);
 
   const handleAddLogList = async (logName: string) => {
-    await createNewLog(logName, session?.user.id ?? "");
+    if (!session) {
+      return;
+    }
+    await createNewLog(logName, session.user.id);
     await fetchLogs();
   };
 
