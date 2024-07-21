@@ -1,13 +1,7 @@
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useEffect,
-  useState,
-} from "react";
+import { addLogItem, deleteLogItem, editLogItem } from "../dbManagement";
+import { createContext, useState } from "react";
 
-import { Log } from "../../utils/LogTypes";
-import { addLogItem } from "../dbManagement";
+import { LogItemRow } from "../../../database.types";
 
 export type logger = {
   id: string;
@@ -15,14 +9,10 @@ export type logger = {
 };
 
 type loggerListHook = {
-  loggerList: Log[];
   updateUid: string;
-  setLoggerList: Dispatch<SetStateAction<logger[]>>;
-  handleAddLogList: (name: string) => void;
   handleAddToLog: (logId: string, message: string) => void;
-  activeLogId: string;
-  setActiveLogId: Dispatch<SetStateAction<string>>;
-  handleMoveLogPosition: (logId: string, direction: 1 | -1) => void;
+  handleEditLogItem: (logItem: LogItemRow) => void;
+  handleDeleteLogItem: (logItemUuid: string) => void;
 };
 
 export const LoggerListContext = createContext<loggerListHook | undefined>(
@@ -34,61 +24,34 @@ export function LoggerListContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [loggerList, setLoggerList] = useState<Log[]>(() => {
-    const logs = localStorage.getItem("LOGS");
-    if (!logs) return [];
-    return JSON.parse(logs);
-  });
-
   const [updateUid, setUpdateUid] = useState(() => crypto.randomUUID());
-  const [activeLogId, setActiveLogId] = useState("");
 
-  useEffect(() => {
-    const logs = JSON.stringify(loggerList);
-    localStorage.setItem("LOGS", logs);
-  }, [loggerList]);
-
-  const handleAddLogList = (name: string) => {
-    const newLog = { id: crypto.randomUUID(), name: name };
-    setLoggerList((oldList) => [...oldList, newLog]);
-  };
-
-  const handleAddToLog = (logId: string, message: string) => {
+  const handleAddToLog = async (logId: string, message: string) => {
     const logItem = {
       log_uuid: logId,
       note: message,
     };
-    addLogItem(logItem);
+    await addLogItem(logItem);
     setUpdateUid(crypto.randomUUID());
   };
 
-  const handleMoveLogPosition = (logId: string, direction: 1 | -1) => {
-    const index = loggerList.findIndex((x) => x.id === logId);
-    const newIndex = index + direction;
-    if (newIndex < 0 || newIndex >= loggerList.length) {
-      return;
-    }
+  const handleEditLogItem = async (logItem: LogItemRow) => {
+    await editLogItem(logItem.uuid, logItem);
+    setUpdateUid(crypto.randomUUID());
+  };
 
-    const copy = [...loggerList];
-
-    const item = copy[index];
-    copy[index] = copy[newIndex];
-    copy[newIndex] = item;
-
-    setLoggerList(copy);
+  const handleDeleteLogItem = async (logItemUuid: string) => {
+    await deleteLogItem(logItemUuid);
+    setUpdateUid(crypto.randomUUID());
   };
 
   return (
     <LoggerListContext.Provider
       value={{
-        loggerList,
         updateUid,
-        setLoggerList,
-        handleAddLogList,
         handleAddToLog,
-        activeLogId,
-        setActiveLogId,
-        handleMoveLogPosition,
+        handleEditLogItem,
+        handleDeleteLogItem,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
@@ -15,19 +15,22 @@ export function IndividualLog() {
   const [logItems, setLogItems] = useState<LogItemRow[] | null>([]);
   const { updateUid } = useLoggerListContext();
 
-  useEffect(() => {
-    const fetchLogItems = async () => {
-      try {
-        const promise = getLogItems(logId ? logId : "");
-        const items = await promise;
-        setLogItems(items.data);
-      } catch (error) {
-        console.error("Failed to fetch log items:", error);
-      }
-    };
+  const fetchLogItems = useCallback(async () => {
+    if (!logId) {
+      return;
+    }
+    try {
+      const promise = getLogItems(logId);
+      const items = await promise;
+      setLogItems(items.data);
+    } catch (error) {
+      console.error("Failed to fetch log items:", error);
+    }
+  }, [logId]);
 
+  useEffect(() => {
     fetchLogItems();
-  }, [logId, logItems, updateUid]);
+  }, [fetchLogItems, updateUid]);
 
   const handleToggle = () => {
     setIsEditMode((oldMode) => !oldMode);
@@ -35,11 +38,7 @@ export function IndividualLog() {
   const navigate = useNavigate();
   const handleGoHome = () => navigate("/", { replace: true });
 
-  const { handleAddToLog, setActiveLogId } = useLoggerListContext();
-
-  useEffect(() => {
-    setActiveLogId(logId ? logId : "");
-  }, [logId, setActiveLogId]);
+  const { handleAddToLog } = useLoggerListContext();
 
   return (
     <>

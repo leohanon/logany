@@ -1,10 +1,11 @@
 import { IconButton, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { BaseNav } from "./BaseNav";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import EditIcon from "@mui/icons-material/Edit";
-import { useLoggerListContext } from "../hooks/useLoggerListContext";
+import { getLogDetails } from "../services/dbManagement";
 
 type LogNavBarProps = {
   logId: string;
@@ -18,15 +19,18 @@ export function IndividualLogNavBar({
   handleToggle,
   isEditMode: isEditMode,
 }: LogNavBarProps) {
-  const { loggerList } = useLoggerListContext();
+  const [logName, setLogName] = useState("");
 
+  useEffect(() => {
+    getLogDetails(logId).then((x) => setLogName(x.data?.name ?? ""));
+  }, [logId]);
   return (
     <BaseNav>
       <IconButton onClick={handleGoHome}>
         <ArrowBackIcon fontSize="large" />
       </IconButton>
       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-        {logId && loggerList.find((x) => x.id == logId)?.name}
+        {logName}
       </Typography>
       <IconButton onClick={handleToggle}>
         {isEditMode ? (
