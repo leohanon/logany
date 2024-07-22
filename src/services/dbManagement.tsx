@@ -92,11 +92,15 @@ export const createNewLog = async (logName: string, user_uuid: string) => {
   }
 };
 
-export const fetchAllUserLogs = (user_uuid: string) => {
-  return supabase
+export const fetchAllUserLogs = async (user_uuid: string) => {
+  const { data, error } = await supabase
     .from("logs")
     .select("*, log_permissions(*)")
     .eq("log_permissions.user_uuid", user_uuid);
+  if (error) {
+    throw error;
+  }
+  return data;
 };
 
 export const getLogDetails = (logUuid: string) => {

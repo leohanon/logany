@@ -1,21 +1,18 @@
-import {
-  createNewLog,
-  deleteLog,
-  fetchAllUserLogs,
-} from "../services/dbManagement";
-import { useCallback, useEffect, useState } from "react";
+import { createNewLog, deleteLog } from "../services/dbManagement";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
-import { LogRow } from "../../database.types";
 import { LoggerListItem } from "../components/LoggerListItem";
 import { LoggerListNav } from "../components/LoggerListNav";
 import { Stack } from "@mui/material";
-import { useAuth } from "../hooks/useAuth";
+import { mutate } from "swr";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+import { useLogs } from "../hooks/useLogs";
+import { useState } from "react";
 
 export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);
-  const session = useAuth();
-  const [loggerList, setLoggerList] = useState<LogRow[] | null>([]);
+  const { data: user } = useCurrentUser();
+  const { data } = useLogs();
 
   const toggleEditMode = () => {
     setIsEditMode((oldMode) => {
@@ -23,33 +20,20 @@ export function LoggerList() {
     });
   };
 
-  const fetchLogs = useCallback(async () => {
-    if (!session?.user.id) {
-      return;
-    }
-    const { data, error } = await fetchAllUserLogs(session.user.id);
-    if (error) {
-      console.error("Error fetching logs:", error);
-    } else {
-      setLoggerList(data);
-    }
-  }, [session?.user.id]);
-
-  useEffect(() => {
-    fetchLogs();
-  }, [fetchLogs]);
-
   const handleAddLogList = async (logName: string) => {
-    if (!session) {
+    if (!user) {
       return;
     }
-    await createNewLog(logName, session.user.id);
-    await fetchLogs();
+    await createNewLog(logName, user.id);
+    mutate(user.id);
   };
 
   const handleDeleteLog = async (logUuid: string) => {
+    if (!user) {
+      return;
+    }
     await deleteLog(logUuid);
-    await fetchLogs();
+    mutate(user.id);
   };
 
   return (
@@ -64,7 +48,7 @@ export function LoggerList() {
         alignItems={"stretch"}
         spacing={1}
       >
-        {loggerList?.map((x) => {
+        {data?.map((x) => {
           return (
             <LoggerListItem
               key={x.uuid}
