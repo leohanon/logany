@@ -7,6 +7,29 @@ const supabaseKey = import.meta.env.VITE_ANON_API_KEY;
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 
+export const fetchAllUserLogs = async (userUuid: string) => {
+  const { data, error } = await supabase
+    .from("logs")
+    .select("*, log_permissions(*)")
+    .eq("log_permissions.user_uuid", userUuid);
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+export const getLogItems = async (logUuid: string) => {
+  const { data, error } = await supabase
+    .from("log_items")
+    .select("*")
+    .eq("log_uuid", logUuid)
+    .order("created_at", { ascending: false });
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
 export const addLogItem = async (logItem: LogItemInsert) => {
   try {
     const { error: logError } = await supabase
@@ -19,14 +42,6 @@ export const addLogItem = async (logItem: LogItemInsert) => {
   } catch (error) {
     console.error("Error adding log list:", error);
   }
-};
-
-export const getLogItems = (logUuid: string) => {
-  return supabase
-    .from("log_items")
-    .select()
-    .eq("log_uuid", logUuid)
-    .order("created_at", { ascending: false });
 };
 
 export const editLogItem = async (id: string, logItem: LogItemRow) => {
@@ -92,18 +107,7 @@ export const createNewLog = async (logName: string, user_uuid: string) => {
   }
 };
 
-export const fetchAllUserLogs = async (user_uuid: string) => {
-  const { data, error } = await supabase
-    .from("logs")
-    .select("*, log_permissions(*)")
-    .eq("log_permissions.user_uuid", user_uuid);
-  if (error) {
-    throw error;
-  }
-  return data;
-};
-
-export const getLogDetails = (logUuid: string) => {
+export const getLogDetails = async (logUuid: string) => {
   return supabase.from("logs").select().eq("uuid", logUuid).single();
 };
 

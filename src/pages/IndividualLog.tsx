@@ -1,36 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
 import { IndividualLogItem } from "../components/IndividualLogItem";
 import { IndividualLogNavBar } from "../components/IndividualLogNavBar";
-import { LogItemRow } from "../../database.types";
 import { Stack } from "@mui/material";
-import { getLogItems } from "../services/dbManagement";
+import { useLogItems } from "../hooks/useLogItems";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
+import { useState } from "react";
 
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
   const [isEditMode, setIsEditMode] = useState(false);
-  const [logItems, setLogItems] = useState<LogItemRow[] | null>([]);
-  const { updateUid } = useLoggerListContext();
-
-  const fetchLogItems = useCallback(async () => {
-    if (!logId) {
-      return;
-    }
-    try {
-      const promise = getLogItems(logId);
-      const items = await promise;
-      setLogItems(items.data);
-    } catch (error) {
-      console.error("Failed to fetch log items:", error);
-    }
-  }, [logId]);
-
-  useEffect(() => {
-    fetchLogItems();
-  }, [fetchLogItems, updateUid]);
+  const { data } = useLogItems(logId);
 
   const handleToggle = () => {
     setIsEditMode((oldMode) => !oldMode);
@@ -61,7 +42,7 @@ export function IndividualLog() {
             }
           />
         )}
-        {logItems?.map((x) => {
+        {data?.map((x) => {
           return (
             <IndividualLogItem
               key={x.uuid}

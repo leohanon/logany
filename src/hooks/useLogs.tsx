@@ -3,7 +3,7 @@ import { useCurrentUser } from "./useCurrentUser";
 import useSWR from "swr";
 
 export function useLogs() {
-  const { data: user } = useCurrentUser();
+  const user = useCurrentUser();
   const { data, error, isLoading } = useSWR(() => user?.id, fetchAllUserLogs);
   return {
     data,

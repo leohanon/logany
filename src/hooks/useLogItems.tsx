@@ -1,10 +1,8 @@
-import { fetchAllUserLogs } from "../services/dbManagement";
-import { useCurrentUser } from "./useCurrentUser";
+import { getLogItems } from "../services/dbManagement";
 import useSWR from "swr";
 
-export function useLogItems() {
-  const { data: user } = useCurrentUser();
-  const { data, error, isLoading } = useSWR(() => user?.id, fetchAllUserLogs);
+export function useLogItems(logUuid: string | undefined) {
+  const { data, error, isLoading } = useSWR(logUuid, getLogItems);
   return {
     data,
     isLoading,

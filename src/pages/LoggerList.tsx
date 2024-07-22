@@ -11,7 +11,7 @@ import { useState } from "react";
 
 export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);
-  const { data: user } = useCurrentUser();
+  const user = useCurrentUser();
   const { data } = useLogs();
 
   const toggleEditMode = () => {
