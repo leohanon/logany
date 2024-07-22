@@ -1,7 +1,8 @@
 import { addLogItem, deleteLogItem, editLogItem } from "../dbManagement";
-import { createContext, useState } from "react";
 
 import { LogItemRow } from "../../../database.types";
+import { createContext } from "react";
+import { mutate } from "swr";
 
 export type logger = {
   id: string;
@@ -9,10 +10,9 @@ export type logger = {
 };
 
 type loggerListHook = {
-  updateUid: string;
-  handleAddToLog: (logId: string, message: string) => void;
+  handleAddToLog: (logUuid: string, message: string) => void;
   handleEditLogItem: (logItem: LogItemRow) => void;
-  handleDeleteLogItem: (logItemUuid: string) => void;
+  handleDeleteLogItem: (logItemUuid: string, logUuid: string) => void;
 };
 
 export const LoggerListContext = createContext<loggerListHook | undefined>(
@@ -24,31 +24,28 @@ export function LoggerListContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [updateUid, setUpdateUid] = useState(() => crypto.randomUUID());
-
-  const handleAddToLog = async (logId: string, message: string) => {
+  const handleAddToLog = async (logUuid: string, message: string) => {
     const logItem = {
-      log_uuid: logId,
+      log_uuid: logUuid,
       note: message,
     };
     await addLogItem(logItem);
-    setUpdateUid(crypto.randomUUID());
+    mutate(logUuid);
   };
 
   const handleEditLogItem = async (logItem: LogItemRow) => {
     await editLogItem(logItem.uuid, logItem);
-    setUpdateUid(crypto.randomUUID());
+    mutate(logItem.log_uuid);
   };
 
-  const handleDeleteLogItem = async (logItemUuid: string) => {
+  const handleDeleteLogItem = async (logItemUuid: string, logUuid: string) => {
     await deleteLogItem(logItemUuid);
-    setUpdateUid(crypto.randomUUID());
+    mutate(logUuid);
   };
 
   return (
     <LoggerListContext.Provider
       value={{
-        updateUid,
         handleAddToLog,
         handleEditLogItem,
         handleDeleteLogItem,

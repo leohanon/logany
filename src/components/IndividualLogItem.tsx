@@ -65,7 +65,9 @@ export function IndividualLogItem({
             }}
           />
           <Typography>{note}</Typography>
-          <DeleteButton onDelete={() => handleDeleteLogItem(logItem.uuid)} />
+          <DeleteButton
+            onDelete={() => handleDeleteLogItem(logItem.uuid, logItem.log_uuid)}
+          />
         </>
       )}
     </Paper>
