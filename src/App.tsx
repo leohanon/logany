@@ -1,5 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+import AcceptInvite from "./pages/AcceptInvite";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { IndividualLog } from "./pages/IndividualLog";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <LoggerList />,
+      },
+      {
+        path: "share",
+        element: <AcceptInvite />,
       },
     ],
   },

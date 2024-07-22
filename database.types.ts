@@ -83,21 +83,31 @@ export type Database = {
       };
       log_sharing_keys: {
         Row: {
+          claimer_uuid: string | null;
           created_at: string;
           id: string;
           log_uuid: string;
         };
         Insert: {
+          claimer_uuid?: string | null;
           created_at?: string;
           id?: string;
           log_uuid?: string;
         };
         Update: {
+          claimer_uuid?: string | null;
           created_at?: string;
           id?: string;
           log_uuid?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "log_sharing_keys_claimer_uuid_fkey";
+            columns: ["claimer_uuid"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "log_sharing_keys_log_uuid_fkey";
             columns: ["log_uuid"];
@@ -150,6 +160,10 @@ export type Database = {
           _log_uuid: string;
         };
         Returns: boolean;
+      };
+      testing_checks: {
+        Args: Record<PropertyKey, never>;
+        Returns: string;
       };
     };
     Enums: {

@@ -122,10 +122,14 @@ export const createInviteCode = async (logUuid: string) => {
   return inviteUuid;
 };
 
-const addInviteCodeToUserMetadata = async (inviteUuid: string) => {
-  const { error } = await supabase.auth.updateUser({
-    data: { invite_uuid: inviteUuid },
-  });
+const addUserUuidToInviteRecord = async (
+  inviteUuid: string,
+  user_uuid: string,
+) => {
+  const { error } = await supabase
+    .from("log_sharing_keys")
+    .update({ claimer_uuid: user_uuid })
+    .eq("id", inviteUuid);
   if (error) {
     throw error;
   }
@@ -153,12 +157,12 @@ const deleteInviteCode = async (inviteUuid: string) => {
 
 export const acceptInvite = async (inviteUuid: string) => {
   try {
-    await addInviteCodeToUserMetadata(inviteUuid);
-
     const userUuid = (await supabase.auth.getUser()).data.user?.id;
     if (!userUuid) {
       throw new Error("No user uuid.");
     }
+
+    await addUserUuidToInviteRecord(inviteUuid, userUuid);
 
     const logUuid = await getLogUuidFromInviteCode(inviteUuid);
     if (!logUuid) {
