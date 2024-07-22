@@ -1,3 +1,7 @@
+export type LogItemRow = Database["public"]["Tables"]["log_items"]["Row"];
+export type LogItemInsert = Database["public"]["Tables"]["log_items"]["Insert"];
+export type LogRow = Database["public"]["Tables"]["logs"]["Row"];
+
 export type Json =
   | string
   | number
@@ -77,19 +81,48 @@ export type Database = {
           },
         ];
       };
+      log_sharing_keys: {
+        Row: {
+          created_at: string;
+          id: string;
+          log_uuid: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          log_uuid?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          log_uuid?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "log_sharing_keys_log_uuid_fkey";
+            columns: ["log_uuid"];
+            isOneToOne: false;
+            referencedRelation: "logs";
+            referencedColumns: ["uuid"];
+          },
+        ];
+      };
       logs: {
         Row: {
           created_at: string;
+          last_log_at: string;
           name: string;
           uuid: string;
         };
         Insert: {
           created_at?: string;
+          last_log_at?: string;
           name?: string;
           uuid?: string;
         };
         Update: {
           created_at?: string;
+          last_log_at?: string;
           name?: string;
           uuid?: string;
         };
@@ -100,7 +133,24 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      auth_can_add_permission: {
+        Args: {
+          _log_uuid: string;
+        };
+        Returns: boolean;
+      };
+      auth_has_permission: {
+        Args: {
+          _log_uuid: string;
+        };
+        Returns: boolean;
+      };
+      auth_is_owner: {
+        Args: {
+          _log_uuid: string;
+        };
+        Returns: boolean;
+      };
     };
     Enums: {
       [_ in never]: never;
@@ -110,10 +160,6 @@ export type Database = {
     };
   };
 };
-
-export type LogItemRow = Database["public"]["Tables"]["log_items"]["Row"];
-export type LogItemInsert = Database["public"]["Tables"]["log_items"]["Insert"];
-export type LogRow = Database["public"]["Tables"]["logs"]["Row"];
 
 type PublicSchema = Database[Extract<keyof Database, "public">];
 

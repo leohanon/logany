@@ -5,6 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { BaseNav } from "./BaseNav";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import EditIcon from "@mui/icons-material/Edit";
+import { ShareModal } from "./ShareModal";
 import { getLogDetails } from "../services/dbManagement";
 
 type LogNavBarProps = {
@@ -32,6 +33,7 @@ export function IndividualLogNavBar({
       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
         {logName}
       </Typography>
+      <ShareModal logUuid={logId} />
       <IconButton onClick={handleToggle}>
         {isEditMode ? (
           <DoneOutlineIcon fontSize="large" />

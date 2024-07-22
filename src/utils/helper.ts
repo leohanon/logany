@@ -14,3 +14,13 @@ export async function delayFunction() {
     }, 1000); // 1000 milliseconds = 1 second
   });
 }
+
+export const generateInviteLink = (inviteUuid: string) => {
+  const baseUrl = window.location.origin;
+  const path = "/share"; // Your sharing path
+  const params = new URLSearchParams({
+    id: inviteUuid, // Example parameter, replace with your actual parameter
+  }).toString();
+
+  return `${baseUrl}${path}?${params}`;
+};
