@@ -60,7 +60,7 @@ export function LoggerList() {
           return (
             <LoggerListItem
               key={log.uuid}
-              onDelete={() => handleDeleteLog(log.uuid)}
+              onDelete={() => handleDeleteLog(log.uuid ?? "")}
               isEditMode={isEditMode}
               log={log}
             />

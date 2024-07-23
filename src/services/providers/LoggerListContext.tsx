@@ -1,4 +1,9 @@
-import { addLogItem, deleteLogItem, editLogItem } from "../dbManagement";
+import {
+  addLogItem,
+  deleteLogItem,
+  editLogItem,
+  supabase,
+} from "../dbManagement";
 
 import { LogItemRow } from "../../../database.types";
 import { createContext } from "react";
@@ -29,17 +34,23 @@ export function LoggerListContextProvider({
       log_uuid: logUuid,
       note: message,
     };
+    const user = (await supabase.auth.getSession()).data.session?.user.id;
     await addLogItem(logItem);
+    mutate(user);
     mutate(logUuid);
   };
 
   const handleEditLogItem = async (logItem: LogItemRow) => {
+    const user = (await supabase.auth.getSession()).data.session?.user.id;
     await editLogItem(logItem.uuid, logItem);
+    mutate(user);
     mutate(logItem.log_uuid);
   };
 
   const handleDeleteLogItem = async (logItemUuid: string, logUuid: string) => {
+    const user = (await supabase.auth.getSession()).data.session?.user.id;
     await deleteLogItem(logItemUuid);
+    mutate(user);
     mutate(logUuid);
   };
 

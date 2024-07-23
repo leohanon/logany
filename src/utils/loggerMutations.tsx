@@ -1,25 +1,25 @@
 import { createNewLog, removeLog } from "../services/dbManagement";
 
-import { LogRow } from "../../database.types";
+import { LogViewRow } from "../../database.types";
 import dayjs from "dayjs";
 
 export const addMutation = async (
   newLog: string,
-  logs: LogRow[],
+  logs: LogViewRow[],
   userUuid: string,
 ) => {
   const added = await createNewLog(newLog, userUuid);
   return added ? [...logs, added] : logs;
 };
 
-export const addMutationOptions = (newLog: string, logs: LogRow[]) => {
+export const addMutationOptions = (newLog: string, logs: LogViewRow[]) => {
   return {
     optimisticData: [
       ...logs,
       {
         uuid: crypto.randomUUID(),
         name: newLog,
-        last_log_at: dayjs().toISOString(),
+        last_updated_at: dayjs().toISOString(),
         created_at: dayjs().toISOString(),
       },
     ],
@@ -30,14 +30,14 @@ export const addMutationOptions = (newLog: string, logs: LogRow[]) => {
 
 export const deleteMutation = async (
   logUuid: string,
-  logs: LogRow[],
+  logs: LogViewRow[],
   userUuid: string,
 ) => {
   await removeLog(logUuid, userUuid);
   return logs.filter((x) => x.uuid != logUuid);
 };
 
-export const deleteMutationOptions = (logUuid: string, logs: LogRow[]) => {
+export const deleteMutationOptions = (logUuid: string, logs: LogViewRow[]) => {
   return {
     optimisticData: logs.filter((x) => x.uuid != logUuid),
     populateCache: true,

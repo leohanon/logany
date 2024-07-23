@@ -2,6 +2,7 @@ export type LogItemRow = Database["public"]["Tables"]["log_items"]["Row"];
 export type LogItemInsert = Database["public"]["Tables"]["log_items"]["Insert"];
 export type LogRow = Database["public"]["Tables"]["logs"]["Row"];
 export type LogInsert = Database["public"]["Tables"]["logs"]["Insert"];
+export type LogViewRow = Database["public"]["Views"]["logs_summary"]["Row"];
 
 export type Json =
   | string
@@ -41,6 +42,13 @@ export type Database = {
             referencedRelation: "logs";
             referencedColumns: ["uuid"];
           },
+          {
+            foreignKeyName: "log_items_log_uuid_fkey";
+            columns: ["log_uuid"];
+            isOneToOne: false;
+            referencedRelation: "logs_summary";
+            referencedColumns: ["uuid"];
+          },
         ];
       };
       log_permissions: {
@@ -71,6 +79,13 @@ export type Database = {
             columns: ["log_uuid"];
             isOneToOne: false;
             referencedRelation: "logs";
+            referencedColumns: ["uuid"];
+          },
+          {
+            foreignKeyName: "log_permissions_log_uuid_fkey";
+            columns: ["log_uuid"];
+            isOneToOne: false;
+            referencedRelation: "logs_summary";
             referencedColumns: ["uuid"];
           },
           {
@@ -116,6 +131,13 @@ export type Database = {
             referencedRelation: "logs";
             referencedColumns: ["uuid"];
           },
+          {
+            foreignKeyName: "log_sharing_keys_log_uuid_fkey";
+            columns: ["log_uuid"];
+            isOneToOne: false;
+            referencedRelation: "logs_summary";
+            referencedColumns: ["uuid"];
+          },
         ];
       };
       logs: {
@@ -141,10 +163,24 @@ export type Database = {
       };
     };
     Views: {
-      [_ in never]: never;
+      logs_summary: {
+        Row: {
+          created_at: string | null;
+          last_updated_at: string | null;
+          name: string | null;
+          uuid: string | null;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
       auth_can_add_permission: {
+        Args: {
+          _log_uuid: string;
+        };
+        Returns: boolean;
+      };
+      auth_can_see_log_name: {
         Args: {
           _log_uuid: string;
         };
@@ -162,9 +198,12 @@ export type Database = {
         };
         Returns: boolean;
       };
-      testing_checks: {
-        Args: Record<PropertyKey, never>;
-        Returns: string;
+      sharing_key_log_uuid_unchanged: {
+        Args: {
+          _invite_uuid: string;
+          _new_log_uuid: string;
+        };
+        Returns: boolean;
       };
     };
     Enums: {

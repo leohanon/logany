@@ -10,7 +10,7 @@ import {
 import { ConfirmableButton } from "./ui/ConfirmableButton";
 import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-import { LogRow } from "../../database.types";
+import { LogViewRow } from "../../database.types";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { TimeSince } from "../components/TimeSince";
 import dayjs from "dayjs";
@@ -18,7 +18,7 @@ import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {
-  log: LogRow;
+  log: LogViewRow;
   isEditMode: boolean;
   onDelete: () => void;
 };
@@ -77,7 +77,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
             </Typography>
             {!isEditMode && (
               <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
-                <TimeSince lastUpdate={dayjs(log.last_log_at).valueOf()} />
+                <TimeSince lastUpdate={dayjs(log.last_updated_at).valueOf()} />
               </Typography>
             )}
           </Stack>
@@ -85,7 +85,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
         <Box>
           {!isEditMode && (
             <ConfirmableButton
-              onClick={() => handleAddToLog(log.uuid, "")}
+              onClick={() => handleAddToLog(log.uuid ?? "", "")}
               Icon={ElectricBoltIcon}
             />
           )}
