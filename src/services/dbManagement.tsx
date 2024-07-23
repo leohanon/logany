@@ -2,6 +2,7 @@ import { LogItemInsert, LogItemRow } from "../../database.types";
 
 import { Database } from "../../database.types";
 import { createClient } from "@supabase/supabase-js";
+import { mutate } from "swr";
 
 const supabaseKey = import.meta.env.VITE_ANON_API_KEY;
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -206,16 +207,6 @@ const getLogUuidFromInviteCode = async (inviteUuid: string) => {
   ).data?.log_uuid;
 };
 
-const deleteInviteCode = async (inviteUuid: string) => {
-  const { error } = await supabase
-    .from("log_sharing_keys")
-    .delete()
-    .eq("id", inviteUuid);
-  if (error) {
-    throw error;
-  }
-};
-
 export const acceptInvite = async (inviteUuid: string) => {
   try {
     const userUuid = (await supabase.auth.getUser()).data.user?.id;
@@ -239,7 +230,7 @@ export const acceptInvite = async (inviteUuid: string) => {
       throw permissionError;
     }
 
-    await deleteInviteCode(inviteUuid);
+    mutate([userUuid, logUuid, "hasPermission"]);
   } catch (error) {
     console.error("Error accepting invite:", error);
   }

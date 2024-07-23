@@ -10,21 +10,18 @@ export function useInvite(inviteUuid: string | null) {
     isLoading: isInviteDetailsLoading,
   } = useSWR(inviteUuid, getInviteDetails);
   const user = useCurrentUser();
+  const logUuid = inviteDetails?.log_uuid;
   const {
     data: hasAccess,
     error: permissionError,
     isLoading: isAccessLoading,
   } = useSWR(
-    user && inviteDetails?.log_uuid
-      ? [user.id, inviteDetails.log_uuid, "hasPermission"]
-      : null,
-    ([user, logUuid]) => hasPermission(user, logUuid),
+    user && logUuid ? [user.id, logUuid, "hasPermission"] : null,
+    ([userUuid, logUuid]) => hasPermission(userUuid, logUuid),
   );
 
   const isLoading = isAccessLoading || isInviteDetailsLoading;
   const isError = inviteDetailsError || permissionError;
-
-  console.log("test");
 
   return { inviteDetails, isError, isLoading, hasAccess };
 }
