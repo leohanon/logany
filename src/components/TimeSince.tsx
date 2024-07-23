@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { timeSince } from "./helper";
+import { timeSince } from "../utils/helper";
 
 type timeSinceProps = {
   lastUpdate: number;

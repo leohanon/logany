@@ -1,26 +1,23 @@
 import { DateTimePicker, renderTimeViewClock } from "@mui/x-date-pickers";
 import { Paper, Typography } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
-import { deleteLogItem, editLogItem } from "./dbManagement";
 
-import { DeleteButton } from "./DeleteButton";
-import { LogItem } from "./LogTypes";
+import { DeleteButton } from "./ui/DeleteButton";
+import { LogItemRow } from "../../database.types";
+import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useState } from "react";
 
 type LogItemDisplayParams = {
-  logItem: LogItem;
+  logItem: LogItemRow;
   isEditMode: boolean;
 };
 export function IndividualLogItem({
   logItem,
   isEditMode,
 }: LogItemDisplayParams) {
-  const { timestamp, note } = logItem;
-  const [dateValue, setDateValue] = useState<Dayjs | null>(dayjs(timestamp));
-
-  const handleDeleteLogItem = () => {
-    deleteLogItem(timestamp.toString());
-  };
+  const { created_at, note } = logItem;
+  const [dateValue, setDateValue] = useState<Dayjs | null>(dayjs(created_at));
+  const { handleEditLogItem, handleDeleteLogItem } = useLoggerListContext();
 
   const dateFormat = "M/DD - h:mm A";
 
@@ -37,7 +34,7 @@ export function IndividualLogItem({
     >
       {!isEditMode && (
         <Typography>
-          {dayjs(timestamp).format(dateFormat)} - {note}
+          {dayjs(created_at).format(dateFormat)} - {note}
         </Typography>
       )}
       {isEditMode && (
@@ -52,10 +49,12 @@ export function IndividualLogItem({
               setDateValue(newValue);
             }}
             onAccept={(newValue) => {
-              editLogItem(timestamp.toString(), {
-                timestamp: newValue ? newValue.valueOf() : 0,
-                id: newValue ? newValue.valueOf().toString() : "0",
-                logId: logItem.logId,
+              handleEditLogItem({
+                created_at: newValue
+                  ? newValue.toISOString().toLocaleLowerCase()
+                  : dayjs().toISOString().toLocaleLowerCase(),
+                uuid: logItem.uuid,
+                log_uuid: logItem.log_uuid,
                 note: logItem.note,
               });
             }}
@@ -65,7 +64,10 @@ export function IndividualLogItem({
               seconds: null,
             }}
           />
-          <DeleteButton onDelete={handleDeleteLogItem} />
+          <Typography>{note}</Typography>
+          <DeleteButton
+            onDelete={() => handleDeleteLogItem(logItem.uuid, logItem.log_uuid)}
+          />
         </>
       )}
     </Paper>

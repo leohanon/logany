@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   IconButton,
   Paper,
   Stack,
@@ -8,24 +7,23 @@ import {
   Typography,
 } from "@mui/material";
 
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { ConfirmableButton } from "./ConfirmableButton";
-import { DeleteButton } from "./DeleteButton";
+import { ConfirmableButton } from "./ui/ConfirmableButton";
+import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-import { Log } from "./LogTypes";
+import { LogRow } from "../../database.types";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { TimeSince } from "./TimeSince";
-import { useLoggerListContext } from "./LoggerListContext";
+import { TimeSince } from "../components/TimeSince";
+import dayjs from "dayjs";
+import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {
-  log: Log;
+  log: LogRow;
   isEditMode: boolean;
   onDelete: () => void;
 };
 export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
-  const { handleAddToLog, handleMoveLogPosition } = useLoggerListContext();
+  const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
   return (
     <>
@@ -44,7 +42,9 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
             {!isEditMode && (
               <Tooltip title="View">
                 <IconButton
-                  onClick={() => navigate(`logs/${log.id}`, { replace: true })}
+                  onClick={() =>
+                    navigate(`logs/${log.uuid}`, { replace: true })
+                  }
                 >
                   <MenuOpenIcon fontSize="large" />
                 </IconButton>
@@ -52,7 +52,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
             )}
             {isEditMode && (
               <Stack direction="row" spacing={1}>
-                <Button
+                {/* <Button
                   onClick={() => {
                     handleMoveLogPosition(log.id, -1);
                   }}
@@ -69,7 +69,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
                   sx={{ padding: "5px", minWidth: 0 }}
                 >
                   <ArrowDropDownIcon fontSize="large" />
-                </Button>
+                </Button> */}
               </Stack>
             )}
             <Typography variant="h6" sx={{ marginLeft: 1, fontSize: "large" }}>
@@ -77,7 +77,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
             </Typography>
             {!isEditMode && (
               <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
-                <TimeSince lastUpdate={log.lastUpdated} />
+                <TimeSince lastUpdate={dayjs(log.last_log_at).valueOf()} />
               </Typography>
             )}
           </Stack>
@@ -85,7 +85,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
         <Box>
           {!isEditMode && (
             <ConfirmableButton
-              onClick={() => handleAddToLog(log.id, "")}
+              onClick={() => handleAddToLog(log.uuid, "")}
               Icon={ElectricBoltIcon}
             />
           )}
