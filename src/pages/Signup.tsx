@@ -1,5 +1,5 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { Form, Link, useLocation } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import { FormEvent, useRef, useState } from "react";
 
 import RequireAnon from "../components/RequireAnon";
