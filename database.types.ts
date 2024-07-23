@@ -1,6 +1,7 @@
 export type LogItemRow = Database["public"]["Tables"]["log_items"]["Row"];
 export type LogItemInsert = Database["public"]["Tables"]["log_items"]["Insert"];
 export type LogRow = Database["public"]["Tables"]["logs"]["Row"];
+export type LogInsert = Database["public"]["Tables"]["logs"]["Insert"];
 
 export type Json =
   | string

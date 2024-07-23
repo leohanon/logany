@@ -10,7 +10,7 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 export const fetchAllUserLogs = async (userUuid: string) => {
   const { data, error } = await supabase
     .from("logs")
-    .select("*, log_permissions(*)")
+    .select("*, log_permissions()")
     .eq("log_permissions.user_uuid", userUuid);
   if (error) {
     throw error;
@@ -30,42 +30,58 @@ export const getLogItems = async (logUuid: string) => {
   return data;
 };
 
-export const addLogItem = async (logItem: LogItemInsert) => {
-  try {
-    const { error: logError } = await supabase
-      .from("log_items")
-      .insert(logItem);
+export const hasPermission = async (userUuid: string) => {
+  const { count, error } = await supabase
+    .from("log_permissions")
+    .select("*", { count: "exact", head: true })
+    .eq("user_uuid", userUuid);
+  if (error) {
+    throw error;
+  }
+  return count ? count > 0 : false;
+};
 
-    if (logError) {
-      throw logError;
-    }
-  } catch (error) {
-    console.error("Error adding log list:", error);
+export const getInviteDetails = async (inviteUuid: string) => {
+  const { data, error } = await supabase
+    .from("log_sharing_keys")
+    .select("*, logs(*)")
+    .eq("id", inviteUuid)
+    .single();
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+export const addLogItem = async (logItem: LogItemInsert) => {
+  const { error } = await supabase.from("log_items").insert(logItem);
+  if (error) {
+    throw error;
   }
 };
 
 export const editLogItem = async (id: string, logItem: LogItemRow) => {
-  try {
-    const response = await supabase
-      .from("log_items")
-      .update(logItem)
-      .eq("uuid", id);
-
-    if (response.error) {
-      throw response.error;
-    }
-    return response;
-  } catch (error) {
-    console.error("Error editing log item:", error);
+  const { error } = await supabase
+    .from("log_items")
+    .update(logItem)
+    .eq("uuid", id);
+  if (error) {
+    throw error;
   }
 };
 
-export const deleteLogItem = (uuid: string) => {
-  return supabase.from("log_items").delete().eq("uuid", uuid);
+export const deleteLogItem = async (uuid: string) => {
+  const { error } = await supabase.from("log_items").delete().eq("uuid", uuid);
+  if (error) {
+    throw error;
+  }
 };
 
-export const deleteLog = (uuid: string) => {
-  return supabase.from("logs").delete().eq("uuid", uuid);
+export const deleteLog = async (uuid: string) => {
+  const { error } = await supabase.from("logs").delete().eq("uuid", uuid);
+  if (error) {
+    throw error;
+  }
 };
 
 const createLog = (logUuid: string, logName: string) => {
@@ -85,26 +101,28 @@ const createPermission = (
 };
 
 export const createNewLog = async (logName: string, user_uuid: string) => {
-  try {
-    const uuid = crypto.randomUUID();
-    console.log(uuid);
-
-    const { error: logError } = await createLog(uuid, logName);
-    if (logError) {
-      throw logError;
-    }
-
-    const { error: permissionError } = await createPermission(
-      uuid,
-      user_uuid,
-      "OWNER",
-    );
-    if (permissionError) {
-      throw permissionError;
-    }
-  } catch (error) {
-    console.error("Error adding log list:", error);
+  const uuid = crypto.randomUUID();
+  const { error: createLogError } = await createLog(uuid, logName);
+  if (createLogError) {
+    throw createLogError;
   }
+  const { error: createPermissionError } = await createPermission(
+    uuid,
+    user_uuid,
+    "OWNER",
+  );
+  if (createPermissionError) {
+    throw createPermissionError;
+  }
+  const { data, error } = await supabase
+    .from("logs")
+    .select("*")
+    .eq("uuid", uuid)
+    .single();
+  if (error) {
+    throw error;
+  }
+  return data;
 };
 
 export const getLogDetails = async (logUuid: string) => {

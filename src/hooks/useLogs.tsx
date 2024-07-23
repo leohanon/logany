@@ -4,10 +4,5 @@ import useSWR from "swr";
 
 export function useLogs() {
   const user = useCurrentUser();
-  const { data, error, isLoading } = useSWR(() => user?.id, fetchAllUserLogs);
-  return {
-    data,
-    isLoading,
-    error,
-  };
+  return useSWR(user?.id, fetchAllUserLogs);
 }

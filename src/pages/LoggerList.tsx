@@ -1,10 +1,14 @@
-import { createNewLog, deleteLog } from "../services/dbManagement";
+import {
+  addMutation,
+  addMutationOptions,
+  deleteMutation,
+  deleteMutationOptions,
+} from "../utils/loggerMutations";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
 import { LoggerListItem } from "../components/LoggerListItem";
 import { LoggerListNav } from "../components/LoggerListNav";
 import { Stack } from "@mui/material";
-import { mutate } from "swr";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useLogs } from "../hooks/useLogs";
 import { useState } from "react";
@@ -12,7 +16,7 @@ import { useState } from "react";
 export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);
   const user = useCurrentUser();
-  const { data } = useLogs();
+  const { data, mutate } = useLogs();
 
   const toggleEditMode = () => {
     setIsEditMode((oldMode) => {
@@ -24,16 +28,20 @@ export function LoggerList() {
     if (!user) {
       return;
     }
-    await createNewLog(logName, user.id);
-    mutate(user.id);
+    await mutate(
+      addMutation(logName, data ?? [], user.id),
+      addMutationOptions(logName, data ?? []),
+    );
   };
 
   const handleDeleteLog = async (logUuid: string) => {
     if (!user) {
       return;
     }
-    await deleteLog(logUuid);
-    mutate(user.id);
+    await mutate(
+      deleteMutation(logUuid, data ?? []),
+      deleteMutationOptions(logUuid, data ?? []),
+    );
   };
 
   return (
