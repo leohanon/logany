@@ -1,4 +1,4 @@
-import { createNewLog, deleteLog } from "../services/dbManagement";
+import { createNewLog, removeLog } from "../services/dbManagement";
 
 import { LogRow } from "../../database.types";
 import dayjs from "dayjs";
@@ -28,8 +28,12 @@ export const addMutationOptions = (newLog: string, logs: LogRow[]) => {
   };
 };
 
-export const deleteMutation = async (logUuid: string, logs: LogRow[]) => {
-  await deleteLog(logUuid);
+export const deleteMutation = async (
+  logUuid: string,
+  logs: LogRow[],
+  userUuid: string,
+) => {
+  await removeLog(logUuid, userUuid);
   return logs.filter((x) => x.uuid != logUuid);
 };
 

@@ -39,7 +39,7 @@ export function LoggerList() {
       return;
     }
     await mutate(
-      deleteMutation(logUuid, logList ?? []),
+      deleteMutation(logUuid, logList ?? [], user.id),
       deleteMutationOptions(logUuid, logList ?? []),
     );
   };

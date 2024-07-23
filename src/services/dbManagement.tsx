@@ -42,6 +42,19 @@ export const hasPermission = async (userUuid: string) => {
   return count ? count > 0 : false;
 };
 
+const isOwner = async (userUuid: string, logUuid: string) => {
+  const { count, error } = await supabase
+    .from("log_permissions")
+    .select("*", { count: "exact", head: true })
+    .eq("user_uuid", userUuid)
+    .eq("log_uuid", logUuid)
+    .eq("access_level", "OWNER");
+  if (error) {
+    throw error;
+  }
+  return count ? count > 0 : false;
+};
+
 export const getInviteDetails = async (inviteUuid: string) => {
   const { data, error } = await supabase
     .from("log_sharing_keys")
@@ -87,10 +100,37 @@ export const deleteLogItem = async (uuid: string) => {
   }
 };
 
-export const deleteLog = async (uuid: string) => {
-  const { error } = await supabase.from("logs").delete().eq("uuid", uuid);
+const deleteLog = async (logUuid: string) => {
+  const { data, error } = await supabase
+    .from("logs")
+    .delete()
+    .eq("uuid", logUuid)
+    .select();
   if (error) {
     throw error;
+  }
+  if (data.length === 0) {
+    throw new Error(`Unable to delete log: ${logUuid}`);
+  }
+};
+
+const deletePermission = async (logUuid: string, userUuid: string) => {
+  const { error } = await supabase
+    .from("log_permissions")
+    .delete()
+    .eq("log_uuid", logUuid)
+    .eq("user_uuid", userUuid)
+    .neq("access_level", "OWNER");
+  if (error) {
+    throw error;
+  }
+};
+
+export const removeLog = async (logUuid: string, userUuid: string) => {
+  if (await isOwner(userUuid, logUuid)) {
+    await deleteLog(logUuid);
+  } else {
+    await deletePermission(logUuid, userUuid);
   }
 };
 
