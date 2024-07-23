@@ -12,8 +12,8 @@ import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import { LogRow } from "../../database.types";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import { TimeSince } from "../components/TimeSince";
 import dayjs from "dayjs";
-import { timeSince } from "../utils/helper";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useNavigate } from "react-router-dom";
 
@@ -54,7 +54,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
               <Stack direction="row" spacing={1}>
                 {/* <Button
                   onClick={() => {
-                    handleMoveLogPosition(logId, -1);
+                    handleMoveLogPosition(log.id, -1);
                   }}
                   variant="outlined"
                   sx={{ padding: "5px", minWidth: 0 }}
@@ -63,7 +63,7 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
                 </Button>
                 <Button
                   onClick={() => {
-                    handleMoveLogPosition(logId, 1);
+                    handleMoveLogPosition(log.id, 1);
                   }}
                   variant="outlined"
                   sx={{ padding: "5px", minWidth: 0 }}
@@ -72,10 +72,12 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
                 </Button> */}
               </Stack>
             )}
-            <Typography sx={{ marginLeft: 1 }}>{log.name}</Typography>
+            <Typography variant="h6" sx={{ marginLeft: 1, fontSize: "large" }}>
+              {log.name}
+            </Typography>
             {!isEditMode && (
-              <Typography sx={{ marginLeft: 1 }}>
-                {timeSince(dayjs(log.last_log_at).valueOf())}
+              <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
+                <TimeSince lastUpdate={dayjs(log.last_log_at).valueOf()} />
               </Typography>
             )}
           </Stack>
