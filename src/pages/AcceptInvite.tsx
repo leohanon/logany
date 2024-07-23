@@ -1,28 +1,32 @@
 import { Button, Stack, Typography } from "@mui/material";
+import { Navigate, useSearchParams } from "react-router-dom";
 
 import { acceptInvite } from "../services/dbManagement";
 import { useInvite } from "../hooks/useInvite";
-import { useSearchParams } from "react-router-dom";
 
 export default function AcceptInvite() {
   const [searchParams] = useSearchParams();
   const inviteUuid = searchParams.get("id");
-  const { data, error, isLoading } = useInvite(inviteUuid);
+  const { inviteDetails, isError, isLoading, hasAccess } =
+    useInvite(inviteUuid);
 
   if (isLoading) {
     return <Typography>Loading</Typography>;
   }
 
-  if (error) {
+  if (isError) {
     return <Typography color="error">There is an error!</Typography>;
   }
 
-  console.log("hello");
+  if (hasAccess) {
+    return <Navigate to={`/logs/${inviteDetails?.log_uuid}`} replace />;
+  }
 
   return (
     <Stack>
       <Typography>
-        You've been invited to contribute to the log "{data?.logs?.name}"!
+        You've been invited to contribute to the log "
+        {inviteDetails?.logs?.name}"!
       </Typography>
       <Typography>
         To accept and see this log in your list, click below.

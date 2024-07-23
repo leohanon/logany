@@ -11,7 +11,7 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 export const fetchAllUserLogs = async (userUuid: string) => {
   const { data, error } = await supabase
     .from("logs")
-    .select("*, log_permissions()")
+    .select("*, log_permissions!inner()")
     .eq("log_permissions.user_uuid", userUuid);
   if (error) {
     throw error;
@@ -31,11 +31,12 @@ export const getLogItems = async (logUuid: string) => {
   return data;
 };
 
-export const hasPermission = async (userUuid: string) => {
+export const hasPermission = async (userUuid: string, logUuid: string) => {
   const { count, error } = await supabase
     .from("log_permissions")
     .select("*", { count: "exact", head: true })
-    .eq("user_uuid", userUuid);
+    .eq("user_uuid", userUuid)
+    .eq("log_uuid", logUuid);
   if (error) {
     throw error;
   }
