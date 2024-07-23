@@ -10,22 +10,19 @@ import {
 import { ConfirmableButton } from "./ui/ConfirmableButton";
 import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
+import { LogRow } from "../../database.types";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import dayjs from "dayjs";
+import { timeSince } from "../utils/helper";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useNavigate } from "react-router-dom";
 
 type LoggerItemProps = {
-  value: string;
-  logId: string;
+  log: LogRow;
   isEditMode: boolean;
   onDelete: () => void;
 };
-export function LoggerListItem({
-  value,
-  logId,
-  isEditMode,
-  onDelete,
-}: LoggerItemProps) {
+export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
   const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
   return (
@@ -45,7 +42,9 @@ export function LoggerListItem({
             {!isEditMode && (
               <Tooltip title="View">
                 <IconButton
-                  onClick={() => navigate(`logs/${logId}`, { replace: true })}
+                  onClick={() =>
+                    navigate(`logs/${log.uuid}`, { replace: true })
+                  }
                 >
                   <MenuOpenIcon fontSize="large" />
                 </IconButton>
@@ -73,13 +72,18 @@ export function LoggerListItem({
                 </Button> */}
               </Stack>
             )}
-            <Typography sx={{ marginLeft: 1 }}>{value}</Typography>
+            <Typography sx={{ marginLeft: 1 }}>{log.name}</Typography>
+            {!isEditMode && (
+              <Typography sx={{ marginLeft: 1 }}>
+                {timeSince(dayjs(log.last_log_at).valueOf())}
+              </Typography>
+            )}
           </Stack>
         </Box>
         <Box>
           {!isEditMode && (
             <ConfirmableButton
-              onClick={() => handleAddToLog(logId, "")}
+              onClick={() => handleAddToLog(log.uuid, "")}
               Icon={ElectricBoltIcon}
             />
           )}

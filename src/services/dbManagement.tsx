@@ -2,6 +2,7 @@ import { LogItemInsert, LogItemRow } from "../../database.types";
 
 import { Database } from "../../database.types";
 import { createClient } from "@supabase/supabase-js";
+import dayjs from "dayjs";
 
 const supabaseKey = import.meta.env.VITE_ANON_API_KEY;
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -54,7 +55,16 @@ export const getInviteDetails = async (inviteUuid: string) => {
 };
 
 export const addLogItem = async (logItem: LogItemInsert) => {
-  const { error } = await supabase.from("log_items").insert(logItem);
+  const { error: logItemError } = await supabase
+    .from("log_items")
+    .insert(logItem);
+  if (logItemError) {
+    throw logItemError;
+  }
+  const { error } = await supabase
+    .from("logs")
+    .update({ last_log_at: dayjs().toISOString().toLocaleLowerCase() })
+    .eq("uuid", logItem.log_uuid ?? "");
   if (error) {
     throw error;
   }

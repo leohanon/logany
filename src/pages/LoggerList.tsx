@@ -16,7 +16,7 @@ import { useState } from "react";
 export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);
   const user = useCurrentUser();
-  const { data, mutate } = useLogs();
+  const { data: logList, mutate } = useLogs();
 
   const toggleEditMode = () => {
     setIsEditMode((oldMode) => {
@@ -29,8 +29,8 @@ export function LoggerList() {
       return;
     }
     await mutate(
-      addMutation(logName, data ?? [], user.id),
-      addMutationOptions(logName, data ?? []),
+      addMutation(logName, logList ?? [], user.id),
+      addMutationOptions(logName, logList ?? []),
     );
   };
 
@@ -39,8 +39,8 @@ export function LoggerList() {
       return;
     }
     await mutate(
-      deleteMutation(logUuid, data ?? []),
-      deleteMutationOptions(logUuid, data ?? []),
+      deleteMutation(logUuid, logList ?? []),
+      deleteMutationOptions(logUuid, logList ?? []),
     );
   };
 
@@ -56,14 +56,13 @@ export function LoggerList() {
         alignItems={"stretch"}
         spacing={1}
       >
-        {data?.map((x) => {
+        {logList?.map((log) => {
           return (
             <LoggerListItem
-              key={x.uuid}
-              value={x.name}
-              logId={x.uuid}
-              onDelete={() => handleDeleteLog(x.uuid)}
+              key={log.uuid}
+              onDelete={() => handleDeleteLog(log.uuid)}
               isEditMode={isEditMode}
+              log={log}
             />
           );
         })}
