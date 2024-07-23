@@ -1,5 +1,5 @@
-import Login from "../pages/Login";
 import { ReactNode } from "react";
+import Signup from "../pages/Signup";
 import { useAuth } from "../hooks/useAuth";
 
 type RequireAuthProps = {
@@ -10,7 +10,7 @@ export default function RequireAuth({ children }: RequireAuthProps) {
   const session = useAuth();
 
   if (!session) {
-    return <Login />;
+    return <Signup />;
   }
   return children;
 }

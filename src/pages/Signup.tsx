@@ -1,5 +1,5 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useLocation } from "react-router-dom";
 import { FormEvent, useRef, useState } from "react";
 
 import RequireAnon from "../components/RequireAnon";
@@ -36,6 +36,9 @@ export default function Signup() {
       .signUp({
         email: emailRef.current.value,
         password: passwordRef.current.value,
+        options: {
+          emailRedirectTo: window.location.href,
+        },
       })
       .then((x) => {
         if (x.error) {

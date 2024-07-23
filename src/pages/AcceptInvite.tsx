@@ -1,13 +1,13 @@
 import { Button, Stack, Typography } from "@mui/material";
-import { Navigate, useSearchParams } from "react-router-dom";
 
 import { acceptInvite } from "../services/dbManagement";
 import { useInvite } from "../hooks/useInvite";
+import { useSearchParams } from "react-router-dom";
 
 export default function AcceptInvite() {
   const [searchParams] = useSearchParams();
   const inviteUuid = searchParams.get("id");
-  const { data, error, isLoading, hasAccess } = useInvite(inviteUuid);
+  const { data, error, isLoading } = useInvite(inviteUuid);
 
   if (isLoading) {
     return <Typography>Loading</Typography>;
@@ -15,10 +15,6 @@ export default function AcceptInvite() {
 
   if (error) {
     return <Typography color="error">There is an error!</Typography>;
-  }
-
-  if (hasAccess) {
-    return <Navigate to={`/logs/${data?.log_uuid}`} replace />;
   }
 
   console.log("hello");
