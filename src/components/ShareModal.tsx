@@ -38,8 +38,13 @@ export function ShareModal({ logUuid }: ShareModalProps) {
 
   const handleCopy = async () => {
     try {
-      const inviteLink = generateInviteLink(await createInviteCode(logUuid));
-      await navigator.clipboard.writeText(inviteLink);
+      const text = new ClipboardItem({
+        "text/plain": createInviteCode(logUuid)
+          .then((x) => generateInviteLink(x))
+          .then((text) => new Blob([text], { type: "text/plain" })),
+      });
+
+      await navigator.clipboard.write([text]);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
     } catch (err) {
