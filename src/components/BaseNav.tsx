@@ -37,17 +37,21 @@ export function BaseNav({ children }: BaseNavProps) {
             <Drawer anchor={"right"} open={open} onClose={toggleDrawer(false)}>
               <Box sx={{ width: 250 }}>
                 <List>
-                  <ListItem key="email">
-                    <Typography>{user?.email}</Typography>
-                  </ListItem>
-                  <ListItem key="signout">
-                    <Button
-                      startIcon={<LogoutIcon />}
-                      onClick={() => supabase.auth.signOut()}
-                    >
-                      Sign Out
-                    </Button>
-                  </ListItem>
+                  {user && (
+                    <>
+                      <ListItem key="email">
+                        <Typography>{user.email}</Typography>
+                      </ListItem>
+                      <ListItem key="signout">
+                        <Button
+                          startIcon={<LogoutIcon />}
+                          onClick={() => supabase.auth.signOut()}
+                        >
+                          Sign Out
+                        </Button>
+                      </ListItem>
+                    </>
+                  )}
                 </List>
               </Box>
             </Drawer>

@@ -1,7 +1,8 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { Form, Link } from "react-router-dom";
 import { FormEvent, useRef, useState } from "react";
 
+import { LoggedOutNav } from "../components/LoggedOutNav";
 import { supabase } from "../services/dbManagement";
 
 export default function Signup() {
@@ -47,18 +48,16 @@ export default function Signup() {
         }
       });
   };
-  if (confirmEmail) {
-    return (
-      <Typography>
-        Success! Please check your email and click the link to confirm your
-        account!
-      </Typography>
-    );
-  }
-  return (
+
+  const content = confirmEmail ? (
+    <Typography>
+      Success! Please check your email and click the link to confirm your
+      account!
+    </Typography>
+  ) : (
     <Form onSubmit={handleSubmit}>
       <Stack spacing={2}>
-        <Typography>Sign up!</Typography>
+        <Typography variant="h3">Sign up!</Typography>
         <TextField
           required
           id="email"
@@ -84,10 +83,26 @@ export default function Signup() {
         />
         {errorMessage && <Typography color="error">{errorMessage}</Typography>}
         <Button type="submit">Create Account</Button>
-        <Typography>
+        <Typography textAlign={"center"}>
           Already have an account? <Link to={"/login"}>Login here!</Link>
         </Typography>
       </Stack>
     </Form>
+  );
+
+  return (
+    <>
+      <LoggedOutNav />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+        }}
+      >
+        {content}
+      </Box>
+    </>
   );
 }

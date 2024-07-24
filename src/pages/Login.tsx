@@ -1,7 +1,8 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { Form, Link } from "react-router-dom";
 import { FormEvent, useRef, useState } from "react";
 
+import { LoggedOutNav } from "../components/LoggedOutNav";
 import { supabase } from "../services/dbManagement";
 
 export default function Login() {
@@ -28,30 +29,44 @@ export default function Login() {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Stack spacing={2}>
-        <Typography>Log in!</Typography>
-        <TextField
-          required
-          id="email"
-          label="E-mail"
-          autoComplete="email"
-          inputRef={emailRef}
-        />
-        <TextField
-          required
-          id="password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          inputRef={passwordRef}
-        />
-        {errorMessage && <Typography color="error">{errorMessage}</Typography>}
-        <Button type="submit">Log in</Button>
-        <Typography>
-          No account? <Link to={"/signup"}>Create an account here!</Link>
-        </Typography>
-      </Stack>
-    </Form>
+    <>
+      <LoggedOutNav />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+        }}
+      >
+        <Form onSubmit={handleSubmit}>
+          <Stack spacing={2}>
+            <Typography variant={"h3"}>Log in!</Typography>
+            <TextField
+              required
+              id="email"
+              label="E-mail"
+              autoComplete="email"
+              inputRef={emailRef}
+            />
+            <TextField
+              required
+              id="password-input"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              inputRef={passwordRef}
+            />
+            {errorMessage && (
+              <Typography color="error">{errorMessage}</Typography>
+            )}
+            <Button type="submit">Log in</Button>
+            <Typography textAlign={"center"}>
+              No account? <Link to={"/signup"}>Create an account here!</Link>
+            </Typography>
+          </Stack>
+        </Form>
+      </Box>
+    </>
   );
 }
