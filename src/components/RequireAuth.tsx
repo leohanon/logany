@@ -9,7 +9,7 @@ type RequireAuthProps = {
 export default function RequireAuth({ children }: RequireAuthProps) {
   const session = useAuth();
 
-  if (!session) {
+  if (session === "anonymous") {
     return <Signup />;
   }
   return children;

@@ -9,7 +9,7 @@ type RequireAuthProps = {
 export default function RequireAnon({ children }: RequireAuthProps) {
   const session = useAuth();
 
-  if (session) {
+  if (session === "authenticated") {
     return <Navigate to="/" replace />;
   }
 

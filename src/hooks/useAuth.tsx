@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
 
-import { Session } from "@supabase/supabase-js";
 import { supabase } from "../services/dbManagement";
 
 export function useAuth() {
-  const [session, setSession] = useState<Session | null>(null);
+  const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+      setStatus(session ? "authenticated" : "anonymous");
+      console.log(
+        `retrieval setting status to: ${
+          session ? "authenticated" : "anonymous"
+        }`,
+      );
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+      setStatus(session ? "authenticated" : "anonymous");
+      console.log(
+        `subscribe setting status to: ${
+          session ? "authenticated" : "anonymous"
+        }`,
+      );
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  return session;
+  return status;
 }
