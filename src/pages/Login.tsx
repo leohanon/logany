@@ -3,6 +3,7 @@ import { Form, Link } from "react-router-dom";
 import { FormEvent, useRef, useState } from "react";
 
 import { LoggedOutNav } from "../components/LoggedOutNav";
+import RequireAnon from "../components/RequireAnon";
 import { supabase } from "../services/dbManagement";
 
 export default function Login() {
@@ -29,7 +30,7 @@ export default function Login() {
   };
 
   return (
-    <>
+    <RequireAnon>
       <LoggedOutNav />
       <Box
         sx={{
@@ -67,6 +68,6 @@ export default function Login() {
           </Stack>
         </Form>
       </Box>
-    </>
+    </RequireAnon>
   );
 }
