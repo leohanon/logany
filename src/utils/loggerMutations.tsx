@@ -3,12 +3,8 @@ import { createNewLog, removeLog } from "../services/dbManagement";
 import { LogViewRow } from "../../database.types";
 import dayjs from "dayjs";
 
-export const addMutation = async (
-  newLog: string,
-  logs: LogViewRow[],
-  userUuid: string,
-) => {
-  const added = await createNewLog(newLog, userUuid);
+export const addMutation = async (newLog: string, logs: LogViewRow[]) => {
+  const added = await createNewLog(newLog);
   return added ? [...logs, added] : logs;
 };
 
@@ -19,7 +15,7 @@ export const addMutationOptions = (newLog: string, logs: LogViewRow[]) => {
       {
         uuid: crypto.randomUUID(),
         name: newLog,
-        last_updated_at: dayjs().toISOString(),
+        last_updated_at: null,
         created_at: dayjs().toISOString(),
       },
     ],
@@ -28,12 +24,8 @@ export const addMutationOptions = (newLog: string, logs: LogViewRow[]) => {
   };
 };
 
-export const deleteMutation = async (
-  logUuid: string,
-  logs: LogViewRow[],
-  userUuid: string,
-) => {
-  await removeLog(logUuid, userUuid);
+export const deleteMutation = async (logUuid: string, logs: LogViewRow[]) => {
+  await removeLog(logUuid);
   return logs.filter((x) => x.uuid != logUuid);
 };
 

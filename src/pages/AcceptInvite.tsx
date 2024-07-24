@@ -8,19 +8,19 @@ import { useInvite } from "../hooks/useInvite";
 export default function AcceptInvite() {
   const [searchParams] = useSearchParams();
   const inviteUuid = searchParams.get("id");
-  const { inviteDetails, isError, isLoading, hasAccess } =
-    useInvite(inviteUuid);
+  const { data, error, isLoading } = useInvite(inviteUuid);
 
   if (isLoading) {
     return <Typography>Loading</Typography>;
   }
 
-  if (isError) {
+  if (error) {
+    console.log(error);
     return <Typography color="error">There is an error!</Typography>;
   }
 
-  if (hasAccess) {
-    return <Navigate to={`/logs/${inviteDetails?.log_uuid}`} replace />;
+  if (data?.hasPermission) {
+    return <Navigate to={`/logs/${data?.log_uuid}`} replace />;
   }
 
   return (
@@ -37,8 +37,7 @@ export default function AcceptInvite() {
         <Stack sx={{ width: "80%", maxWidth: "500px" }} spacing={1}>
           <Typography variant="h4">You're invited!</Typography>
           <Typography>
-            You've been invited to contribute to the log "
-            {inviteDetails?.logs?.name}"!
+            You've been invited to contribute to the log "{data?.logs?.name}"!
           </Typography>
           <Typography>
             To accept and see this log in your list, click below.

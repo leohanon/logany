@@ -1,3 +1,4 @@
+import { Stack, Typography } from "@mui/material";
 import {
   addMutation,
   addMutationOptions,
@@ -8,15 +9,12 @@ import {
 import { CreateLogger } from "../components/ui/CreateLogger";
 import { LoggerListItem } from "../components/LoggerListItem";
 import { LoggerListNav } from "../components/LoggerListNav";
-import { Stack } from "@mui/material";
-import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useLogs } from "../hooks/useLogs";
 import { useState } from "react";
 
 export function LoggerList() {
   const [isEditMode, setIsEditMode] = useState(false);
-  const user = useCurrentUser();
-  const { data: logList, mutate } = useLogs();
+  const { data: logList, error, isLoading, mutate } = useLogs();
 
   const toggleEditMode = () => {
     setIsEditMode((oldMode) => {
@@ -25,25 +23,41 @@ export function LoggerList() {
   };
 
   const handleAddLogList = async (logName: string) => {
-    if (!user) {
-      return;
-    }
     await mutate(
-      addMutation(logName, logList ?? [], user.id),
+      addMutation(logName, logList ?? []),
       addMutationOptions(logName, logList ?? []),
     );
   };
 
   const handleDeleteLog = async (logUuid: string) => {
-    if (!user) {
-      return;
-    }
     await mutate(
-      deleteMutation(logUuid, logList ?? [], user.id),
+      deleteMutation(logUuid, logList ?? []),
       deleteMutationOptions(logUuid, logList ?? []),
     );
   };
 
+  let innerContent = null;
+  if (error) {
+    innerContent = <Typography color={"error"}>{error.message}</Typography>;
+  } else if (isLoading) {
+    innerContent = <Typography>Loading!</Typography>;
+  } else {
+    innerContent = (
+      <>
+        {logList?.map((log) => {
+          return (
+            <LoggerListItem
+              key={log.uuid}
+              onDelete={() => handleDeleteLog(log.uuid ?? "")}
+              isEditMode={isEditMode}
+              log={log}
+            />
+          );
+        })}
+        {!isEditMode && <CreateLogger onSubmit={handleAddLogList} />}
+      </>
+    );
+  }
   return (
     <>
       <LoggerListNav
@@ -56,17 +70,7 @@ export function LoggerList() {
         alignItems={"stretch"}
         spacing={1}
       >
-        {logList?.map((log) => {
-          return (
-            <LoggerListItem
-              key={log.uuid}
-              onDelete={() => handleDeleteLog(log.uuid ?? "")}
-              isEditMode={isEditMode}
-              log={log}
-            />
-          );
-        })}
-        {!isEditMode && <CreateLogger onSubmit={handleAddLogList} />}
+        {innerContent}
       </Stack>
     </>
   );

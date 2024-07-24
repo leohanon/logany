@@ -8,12 +8,21 @@ const supabaseKey = import.meta.env.VITE_ANON_API_KEY;
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 
-export const fetchAllUserLogs = async (userUuid: string) => {
+const getCurrentUserUuid = async () => {
+  return (await supabase.auth.getSession()).data.session?.user?.id;
+};
+
+export const fetchAllUserLogs = async () => {
+  const userUuid = await getCurrentUserUuid();
+  if (!userUuid) {
+    throw new Error("Error retrieving logs. There is no logged in userUuid.");
+  }
   const { data, error } = await supabase
     .from("logs_summary")
     .select("*, log_permissions!inner()")
     .eq("log_permissions.user_uuid", userUuid);
   if (error) {
+    error.message = "Error retrieving logs. " + error.message;
     throw error;
   }
   return data;
@@ -26,12 +35,19 @@ export const getLogItems = async (logUuid: string) => {
     .eq("log_uuid", logUuid)
     .order("created_at", { ascending: false });
   if (error) {
+    error.message = "Error retrieving log items. " + error.message;
     throw error;
   }
   return data;
 };
 
-export const hasPermission = async (userUuid: string, logUuid: string) => {
+export const hasPermission = async (logUuid: string) => {
+  const userUuid = await getCurrentUserUuid();
+  if (!userUuid) {
+    throw new Error(
+      "Error getting permission. There is no logged in userUuid.",
+    );
+  }
   const { count, error } = await supabase
     .from("log_permissions")
     .select("*", { count: "exact", head: true })
@@ -43,7 +59,11 @@ export const hasPermission = async (userUuid: string, logUuid: string) => {
   return count ? count > 0 : false;
 };
 
-const isOwner = async (userUuid: string, logUuid: string) => {
+const isOwner = async (logUuid: string) => {
+  const userUuid = await getCurrentUserUuid();
+  if (!userUuid) {
+    throw new Error("Error checking if owner. There is no logged in userUuid.");
+  }
   const { count, error } = await supabase
     .from("log_permissions")
     .select("*", { count: "exact", head: true })
@@ -65,7 +85,8 @@ export const getInviteDetails = async (inviteUuid: string) => {
   if (error) {
     throw error;
   }
-  return data;
+  const userHasPermission = await hasPermission(data.log_uuid);
+  return { ...data, hasPermission: userHasPermission };
 };
 
 export const addLogItem = async (logItem: LogItemInsert) => {
@@ -108,7 +129,13 @@ const deleteLog = async (logUuid: string) => {
   }
 };
 
-const deletePermission = async (logUuid: string, userUuid: string) => {
+const deletePermission = async (logUuid: string) => {
+  const userUuid = await getCurrentUserUuid();
+  if (!userUuid) {
+    throw new Error(
+      "Error deleting permission. There is no logged in userUuid.",
+    );
+  }
   const { error } = await supabase
     .from("log_permissions")
     .delete()
@@ -120,11 +147,11 @@ const deletePermission = async (logUuid: string, userUuid: string) => {
   }
 };
 
-export const removeLog = async (logUuid: string, userUuid: string) => {
-  if (await isOwner(userUuid, logUuid)) {
+export const removeLog = async (logUuid: string) => {
+  if (await isOwner(logUuid)) {
     await deleteLog(logUuid);
   } else {
-    await deletePermission(logUuid, userUuid);
+    await deletePermission(logUuid);
   }
 };
 
@@ -144,15 +171,19 @@ const createPermission = (
   });
 };
 
-export const createNewLog = async (logName: string, user_uuid: string) => {
+export const createNewLog = async (logName: string) => {
   const uuid = crypto.randomUUID();
+  const userUuid = await getCurrentUserUuid();
+  if (!userUuid) {
+    throw new Error("Error creating new log. There is no logged in userUuid.");
+  }
   const { error: createLogError } = await createLog(uuid, logName);
   if (createLogError) {
     throw createLogError;
   }
   const { error: createPermissionError } = await createPermission(
     uuid,
-    user_uuid,
+    userUuid,
     "OWNER",
   );
   if (createPermissionError) {
@@ -184,13 +215,16 @@ export const createInviteCode = async (logUuid: string) => {
   return inviteUuid;
 };
 
-const addUserUuidToInviteRecord = async (
-  inviteUuid: string,
-  user_uuid: string,
-) => {
+const addSelfToInviteRecord = async (inviteUuid: string) => {
+  const userUuid = await getCurrentUserUuid();
+  if (!userUuid) {
+    throw new Error(
+      "Error adding self to invite record. There is no logged in userUuid.",
+    );
+  }
   const { error } = await supabase
     .from("log_sharing_keys")
-    .update({ claimer_uuid: user_uuid })
+    .update({ claimer_uuid: userUuid })
     .eq("id", inviteUuid);
   if (error) {
     throw error;
@@ -209,25 +243,21 @@ const getLogUuidFromInviteCode = async (inviteUuid: string) => {
 
 export const acceptInvite = async (inviteUuid: string) => {
   try {
-    const userUuid = (await supabase.auth.getUser()).data.user?.id;
+    const userUuid = await getCurrentUserUuid();
     if (!userUuid) {
       throw new Error("No user uuid.");
     }
 
-    await addUserUuidToInviteRecord(inviteUuid, userUuid);
+    await addSelfToInviteRecord(inviteUuid);
 
     const logUuid = await getLogUuidFromInviteCode(inviteUuid);
     if (!logUuid) {
-      throw new Error("No user uuid.");
+      throw new Error("Couldn't retrieve a logUuid from inviteUuid");
     }
 
-    const { error: permissionError } = await createPermission(
-      logUuid,
-      userUuid,
-      "COLLABORATOR",
-    );
-    if (permissionError) {
-      throw permissionError;
+    const { error } = await createPermission(logUuid, userUuid, "COLLABORATOR");
+    if (error) {
+      throw error;
     }
 
     mutate([userUuid, logUuid, "hasPermission"]);
