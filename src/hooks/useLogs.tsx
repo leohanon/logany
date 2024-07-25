@@ -3,5 +3,5 @@ import { fetchAllUserLogs } from "../services/dbManagement";
 import useSWR from "swr";
 
 export function useLogs() {
-  return useSWR<LogViewRow[], Error>(["currentUser"], fetchAllUserLogs);
+  return useSWR<LogViewRow[], Error>(["currentUserLogs"], fetchAllUserLogs);
 }

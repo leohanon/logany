@@ -20,7 +20,8 @@ export const fetchAllUserLogs = async () => {
   const { data, error } = await supabase
     .from("logs_summary")
     .select("*, log_permissions!inner()")
-    .eq("log_permissions.user_uuid", userUuid);
+    .eq("log_permissions.user_uuid", userUuid)
+    .order("created_at", { ascending: false });
   if (error) {
     error.message = "Error retrieving logs. " + error.message;
     throw error;

@@ -11,7 +11,7 @@ import { useState } from "react";
 export function IndividualLog() {
   const { logId } = useParams<{ logId: string }>();
   const [isEditMode, setIsEditMode] = useState(false);
-  const { data } = useLogItems(logId);
+  const { data: logItemsData } = useLogItems(logId);
 
   const handleToggle = () => {
     setIsEditMode((oldMode) => !oldMode);
@@ -42,7 +42,7 @@ export function IndividualLog() {
             }
           />
         )}
-        {data?.map((x) => {
+        {logItemsData?.map((x) => {
           return (
             <IndividualLogItem
               key={x.uuid}

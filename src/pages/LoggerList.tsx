@@ -1,9 +1,9 @@
 import { Stack, Typography } from "@mui/material";
 import {
-  addMutation,
-  addMutationOptions,
-  deleteMutation,
-  deleteMutationOptions,
+  addLogMutation,
+  addLogMutationOptions,
+  deleteLogMutation,
+  deleteLogMutationOptions,
 } from "../utils/loggerMutations";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
@@ -23,17 +23,11 @@ export function LoggerList() {
   };
 
   const handleAddLogList = async (logName: string) => {
-    await mutate(
-      addMutation(logName, logList ?? []),
-      addMutationOptions(logName, logList ?? []),
-    );
+    await mutate(addLogMutation(logName), addLogMutationOptions(logName));
   };
 
   const handleDeleteLog = async (logUuid: string) => {
-    await mutate(
-      deleteMutation(logUuid, logList ?? []),
-      deleteMutationOptions(logUuid, logList ?? []),
-    );
+    await mutate(deleteLogMutation(logUuid), deleteLogMutationOptions(logUuid));
   };
 
   let innerContent = null;
