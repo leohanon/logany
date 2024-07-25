@@ -1,17 +1,9 @@
-import {
-  Box,
-  IconButton,
-  Paper,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 
 import { ConfirmableButton } from "./ui/ConfirmableButton";
 import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import { LogViewRow } from "../../database.types";
-import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { TimeSince } from "../components/TimeSince";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
@@ -43,22 +35,14 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
           height: 56,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center" }}
+          onClick={() => navigate(`logs/${log.uuid}`, { replace: true })}
+        >
           <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            {!isEditMode && (
-              <Tooltip title="View">
-                <IconButton
-                  onClick={() =>
-                    navigate(`logs/${log.uuid}`, { replace: true })
-                  }
-                >
-                  <MenuOpenIcon fontSize="large" />
-                </IconButton>
-              </Tooltip>
-            )}
-            {isEditMode && (
+            {/* {isEditMode && (
               <Stack direction="row" spacing={1}>
-                {/* <Button
+                <Button
                   onClick={() => {
                     handleMoveLogPosition(log.id, -1);
                   }}
@@ -75,10 +59,10 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
                   sx={{ padding: "5px", minWidth: 0 }}
                 >
                   <ArrowDropDownIcon fontSize="large" />
-                </Button> */}
+                </Button>
               </Stack>
-            )}
-            <Typography variant="h6" sx={{ marginLeft: 1, fontSize: "large" }}>
+            )} */}
+            <Typography variant="h6" sx={{ paddingLeft: 1, fontSize: "large" }}>
               {log.name}
             </Typography>
             {!isEditMode && (

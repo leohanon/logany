@@ -41,7 +41,7 @@ export function IndividualLogItem({
         }}
       >
         {!isEditMode && (
-          <Typography>
+          <Typography sx={{ paddingLeft: 1 }}>
             {dayjs(created_at).format(dateFormat)} - {note}
           </Typography>
         )}
