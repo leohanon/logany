@@ -1,11 +1,11 @@
 import { DateTimePicker, renderTimeViewClock } from "@mui/x-date-pickers";
-import { Paper, Typography } from "@mui/material";
+import { Paper, TextField, Typography } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
+import { useRef, useState } from "react";
 
 import { DeleteButton } from "./ui/DeleteButton";
 import { LogItemRow } from "../../database.types";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
-import { useState } from "react";
 
 type LogItemDisplayParams = {
   logItem: LogItemRow;
@@ -16,6 +16,7 @@ export function IndividualLogItem({
   isEditMode,
 }: LogItemDisplayParams) {
   const { created_at, note } = logItem;
+  const nameRef = useRef<HTMLInputElement>(null);
   const [dateValue, setDateValue] = useState<Dayjs | null>(dayjs(created_at));
   const { handleEditLogItem, handleDeleteLogItem } = useLoggerListContext();
 
@@ -55,7 +56,6 @@ export function IndividualLogItem({
                   : dayjs().toISOString().toLocaleLowerCase(),
                 uuid: logItem.uuid,
                 log_uuid: logItem.log_uuid,
-                note: logItem.note,
               });
             }}
             viewRenderers={{
@@ -64,7 +64,18 @@ export function IndividualLogItem({
               seconds: null,
             }}
           />
-          <Typography>{note}</Typography>
+          <TextField
+            defaultValue={note}
+            onBlur={() => {
+              const currentValue = nameRef.current?.value ?? "";
+              handleEditLogItem({
+                uuid: logItem.uuid,
+                note: currentValue,
+                log_uuid: logItem.log_uuid,
+              });
+            }}
+            inputRef={nameRef}
+          />
           <DeleteButton
             onDelete={() => handleDeleteLogItem(logItem.uuid, logItem.log_uuid)}
           />

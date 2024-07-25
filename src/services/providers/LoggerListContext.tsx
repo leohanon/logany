@@ -1,4 +1,4 @@
-import { LogItemRow, LogViewRow } from "../../../database.types";
+import { LogItemRow, LogItemUpdate, LogViewRow } from "../../../database.types";
 import {
   addLogItem,
   deleteLogItem,
@@ -17,7 +17,7 @@ export type logger = {
 
 type loggerListHook = {
   handleAddToLog: (logUuid: string, message: string) => void;
-  handleEditLogItem: (logItem: LogItemRow) => void;
+  handleEditLogItem: (logItem: LogItemUpdate) => void;
   handleDeleteLogItem: (logItemUuid: string, logUuid: string) => void;
 };
 
@@ -73,12 +73,12 @@ export function LoggerListContextProvider({
     );
   };
 
-  const handleEditLogItem = async (logItem: LogItemRow) => {
+  const handleEditLogItem = async (logItem: LogItemUpdate) => {
     mutate(
       logItem.log_uuid,
       async () => {
         try {
-          await editLogItem(logItem.uuid, logItem);
+          await editLogItem(logItem.uuid ?? "", logItem);
         } catch (error) {
           console.error("item was unable to be edited!");
         }
@@ -89,7 +89,9 @@ export function LoggerListContextProvider({
       {
         optimisticData: (data: LogItemRow[] | undefined) => {
           if (!data) return [];
-          return data.map((x) => (x.uuid === logItem.uuid ? logItem : x));
+          return data.map((x) =>
+            x.uuid === logItem.uuid ? { ...x, ...logItem } : x,
+          );
         },
         revalidate: true,
         populateCache: false,

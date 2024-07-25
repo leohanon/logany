@@ -1,4 +1,4 @@
-import { LogItemInsert, LogItemRow } from "../../database.types";
+import { LogItemInsert, LogItemUpdate } from "../../database.types";
 
 import { Database } from "../../database.types";
 import { createClient } from "@supabase/supabase-js";
@@ -99,7 +99,7 @@ export const addLogItem = async (logItem: LogItemInsert) => {
   }
 };
 
-export const editLogItem = async (id: string, logItem: LogItemRow) => {
+export const editLogItem = async (id: string, logItem: LogItemUpdate) => {
   const { error } = await supabase
     .from("log_items")
     .update(logItem)
