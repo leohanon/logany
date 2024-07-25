@@ -21,7 +21,7 @@ export const fetchAllUserLogs = async () => {
     .from("logs_summary")
     .select("*, log_permissions!inner()")
     .eq("log_permissions.user_uuid", userUuid)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: true });
   if (error) {
     error.message = "Error retrieving logs. " + error.message;
     throw error;
@@ -172,18 +172,17 @@ const createPermission = (
   });
 };
 
-export const createNewLog = async (logName: string) => {
-  const uuid = crypto.randomUUID();
+export const createNewLog = async (logUuid: string, logName: string) => {
   const userUuid = await getCurrentUserUuid();
   if (!userUuid) {
     throw new Error("Error creating new log. There is no logged in userUuid.");
   }
-  const { error: createLogError } = await createLog(uuid, logName);
+  const { error: createLogError } = await createLog(logUuid, logName);
   if (createLogError) {
     throw createLogError;
   }
   const { error: createPermissionError } = await createPermission(
-    uuid,
+    logUuid,
     userUuid,
     "OWNER",
   );
@@ -193,7 +192,7 @@ export const createNewLog = async (logName: string) => {
   const { data, error } = await supabase
     .from("logs_summary")
     .select("*")
-    .eq("uuid", uuid)
+    .eq("uuid", logUuid)
     .single();
   if (error) {
     throw error;

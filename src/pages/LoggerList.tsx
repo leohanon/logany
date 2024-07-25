@@ -24,7 +24,11 @@ export function LoggerList() {
   };
 
   const handleAddLogList = async (logName: string) => {
-    await mutate(addLogMutation(logName), addLogMutationOptions(logName));
+    const newLogUuid = crypto.randomUUID();
+    await mutate(
+      addLogMutation(newLogUuid, logName),
+      addLogMutationOptions(newLogUuid, logName),
+    );
   };
 
   const handleDeleteLog = async (logUuid: string) => {

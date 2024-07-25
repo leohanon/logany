@@ -3,15 +3,21 @@ import { createNewLog, removeLog } from "../services/dbManagement";
 import { LogViewRow } from "../../database.types";
 import dayjs from "dayjs";
 
-export const addLogMutation = async (newLog: string) => {
-  await createNewLog(newLog);
+export const addLogMutation = async (
+  newLogUuid: string,
+  newLogName: string,
+) => {
+  await createNewLog(newLogUuid, newLogName);
   return [];
 };
 
-export const addLogMutationOptions = (newLog: string) => {
+export const addLogMutationOptions = (
+  newLogUuid: string,
+  newLogName: string,
+) => {
   const newLogRow = {
-    uuid: crypto.randomUUID(),
-    name: newLog,
+    uuid: newLogUuid,
+    name: newLogName,
     last_updated_at: null,
     created_at: dayjs().toISOString(),
   };
