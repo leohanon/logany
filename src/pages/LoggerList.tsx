@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { Stack, Typography } from "@mui/material";
 import {
   addLogMutation,
@@ -38,16 +39,18 @@ export function LoggerList() {
   } else {
     innerContent = (
       <>
-        {logList?.map((log) => {
-          return (
-            <LoggerListItem
-              key={log.uuid}
-              onDelete={() => handleDeleteLog(log.uuid ?? "")}
-              isEditMode={isEditMode}
-              log={log}
-            />
-          );
-        })}
+        <AnimatePresence initial={false}>
+          {logList?.map((log) => {
+            return (
+              <LoggerListItem
+                key={log.uuid}
+                onDelete={() => handleDeleteLog(log.uuid ?? "")}
+                isEditMode={isEditMode}
+                log={log}
+              />
+            );
+          })}
+        </AnimatePresence>
         {!isEditMode && <CreateLogger onSubmit={handleAddLogList} />}
       </>
     );
@@ -58,14 +61,23 @@ export function LoggerList() {
         isEditMode={isEditMode}
         onToggleEditMode={toggleEditMode}
       />
-      <Stack
-        direction={"column"}
-        justifyContent={"flex-start"}
-        alignItems={"stretch"}
-        spacing={1}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -50 }}
+        transition={{ duration: 0.2 }}
+        key="loggerlist"
       >
-        {innerContent}
-      </Stack>
+        <Stack
+          direction={"column"}
+          justifyContent={"flex-start"}
+          alignItems={"stretch"}
+          spacing={1}
+          sx={{ padding: 1 }}
+        >
+          {innerContent}
+        </Stack>
+      </motion.div>
     </>
   );
 }

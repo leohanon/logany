@@ -14,6 +14,7 @@ import { LogViewRow } from "../../database.types";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { TimeSince } from "../components/TimeSince";
 import dayjs from "dayjs";
+import { motion } from "framer-motion";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +27,12 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
   const { handleAddToLog } = useLoggerListContext();
   const navigate = useNavigate();
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -50 }}
+      transition={{ duration: 0.2 }}
+    >
       <Paper
         elevation={3}
         sx={{
@@ -92,6 +98,6 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
           {isEditMode && <DeleteButton onDelete={onDelete} />}
         </Box>
       </Paper>
-    </>
+    </motion.div>
   );
 }

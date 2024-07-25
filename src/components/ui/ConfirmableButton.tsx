@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { IconButton, Stack } from "@mui/material";
 
 import { ConfirmButtons } from "./ConfirmButtons";
@@ -25,23 +26,29 @@ export function ConfirmableButton({
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   return (
     <>
-      {!isDeleteMode && (
+      <Stack direction={"row"} alignItems={"center"}>
+        <AnimatePresence>
+          {isDeleteMode && (
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.1 }}
+            >
+              <ConfirmButtons
+                onConfirm={() => {
+                  onClick();
+                  setIsDeleteMode(false);
+                }}
+                onCancel={() => setIsDeleteMode(false)}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <IconButton onClick={() => setIsDeleteMode(true)} color={color}>
           <Icon fontSize="large" />
         </IconButton>
-      )}
-      {isDeleteMode && (
-        <Stack direction={"row"} alignItems={"center"}>
-          <ConfirmButtons
-            onConfirm={() => {
-              onClick();
-              setIsDeleteMode(false);
-            }}
-            onCancel={() => setIsDeleteMode(false)}
-          />
-          <Icon fontSize="large" sx={{ width: "51px" }} />
-        </Stack>
-      )}
+      </Stack>
     </>
   );
 }

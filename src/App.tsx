@@ -1,3 +1,5 @@
+import "./App.css";
+
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import AcceptInvite from "./pages/AcceptInvite";
@@ -8,27 +10,22 @@ import { LoggerList } from "./pages/LoggerList";
 import { LoggerListContextProvider } from "./services/providers/LoggerListContext";
 import Login from "./pages/Login";
 import { MainMenu } from "./pages/MainMenu";
-import RequireAuth from "./components/RequireAuth";
 import Signup from "./pages/Signup";
 import TestPage from "./pages/testing";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <RequireAuth>
-        <MainMenu />
-      </RequireAuth>
-    ),
+    element: <MainMenu />,
     errorElement: <div>404 Not Found</div>,
     children: [
       {
-        path: "logs/:logId",
-        element: <IndividualLog />,
+        index: true,
+        element: <LoggerList />,
       },
       {
-        path: "/",
-        element: <LoggerList />,
+        path: "logs/:logId",
+        element: <IndividualLog />,
       },
       {
         path: "share",
@@ -45,7 +42,10 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <LoggerListContextProvider>
-        <RouterProvider router={router}></RouterProvider>
+        <RouterProvider
+          router={router}
+          fallbackElement={<div>loading</div>}
+        ></RouterProvider>
       </LoggerListContextProvider>
     </LocalizationProvider>
   );

@@ -58,7 +58,7 @@ export function BaseNav({ children }: BaseNavProps) {
           </Toolbar>
         </AppBar>
       </Box>
-      <Box sx={{ height: 48 }} />
+      <Box sx={{ height: 56 }} />
     </>
   );
 }

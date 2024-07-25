@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { CreateLogger } from "../components/ui/CreateLogger";
@@ -29,29 +30,40 @@ export function IndividualLog() {
         handleGoHome={handleGoHome}
         handleToggle={handleToggle}
       />
-      <Stack
-        direction={"column"}
-        justifyContent={"flex-start"}
-        alignItems={"stretch"}
-        spacing={1}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 50 }}
+        transition={{ duration: 0.2 }}
+        key="individual"
       >
-        {!isEditMode && (
-          <CreateLogger
-            onSubmit={(value: string) =>
-              handleAddToLog(logId ? logId : "", value)
-            }
-          />
-        )}
-        {logItemsData?.map((x) => {
-          return (
-            <IndividualLogItem
-              key={x.uuid}
-              logItem={x}
-              isEditMode={isEditMode}
+        <Stack
+          direction={"column"}
+          justifyContent={"flex-start"}
+          alignItems={"stretch"}
+          spacing={1}
+          sx={{ padding: 1 }}
+        >
+          {!isEditMode && (
+            <CreateLogger
+              onSubmit={(value: string) =>
+                handleAddToLog(logId ? logId : "", value)
+              }
             />
-          );
-        })}
-      </Stack>
+          )}
+          <AnimatePresence initial={false}>
+            {logItemsData?.map((x) => {
+              return (
+                <IndividualLogItem
+                  key={x.uuid}
+                  logItem={x}
+                  isEditMode={isEditMode}
+                />
+              );
+            })}
+          </AnimatePresence>
+        </Stack>
+      </motion.div>
     </>
   );
 }

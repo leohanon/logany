@@ -15,7 +15,7 @@ export default function AcceptInvite() {
   }
 
   if (error) {
-    console.log(error);
+    console.error(error);
     return <Typography color="error">There is an error!</Typography>;
   }
 

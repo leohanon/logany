@@ -22,7 +22,7 @@ export default function Signup() {
       !passwordRef.current ||
       !passwordConfirmRef.current
     ) {
-      console.log("something is wrong with inputs");
+      console.error("something is wrong with inputs");
       return;
     }
 
