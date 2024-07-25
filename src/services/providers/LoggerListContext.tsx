@@ -74,15 +74,52 @@ export function LoggerListContextProvider({
   };
 
   const handleEditLogItem = async (logItem: LogItemRow) => {
-    await editLogItem(logItem.uuid, logItem);
-    mutate(["currentUserLogs"], fetchAllUserLogs, { revalidate: false });
-    mutate(logItem.log_uuid);
+    mutate(
+      logItem.log_uuid,
+      async () => {
+        try {
+          await editLogItem(logItem.uuid, logItem);
+        } catch (error) {
+          console.error("item was unable to be edited!");
+        }
+        await mutate(["currentUserLogs"], fetchAllUserLogs, {
+          revalidate: false,
+        });
+      },
+      {
+        optimisticData: (data: LogItemRow[] | undefined) => {
+          if (!data) return [];
+          return data.map((x) => (x.uuid === logItem.uuid ? logItem : x));
+        },
+        revalidate: true,
+        populateCache: false,
+      },
+    );
   };
 
   const handleDeleteLogItem = async (logItemUuid: string, logUuid: string) => {
     await deleteLogItem(logItemUuid);
-    mutate(["currentUserLogs"], fetchAllUserLogs, { revalidate: false });
-    mutate(logUuid);
+    mutate(
+      logUuid,
+      async () => {
+        try {
+          await deleteLogItem(logItemUuid);
+        } catch (error) {
+          console.error("item was unable to be deleted!");
+        }
+        await mutate(["currentUserLogs"], fetchAllUserLogs, {
+          revalidate: false,
+        });
+      },
+      {
+        optimisticData: (data: LogItemRow[] | undefined) => {
+          if (!data) return [];
+          return data.filter((x) => x.uuid != logItemUuid);
+        },
+        revalidate: true,
+        populateCache: false,
+      },
+    );
   };
 
   return (
