@@ -37,6 +37,7 @@ export function LoggerListContextProvider({
       note: message,
       uuid: newUuid,
       created_at: dayjs().toISOString(),
+      backlog: 0,
     };
     mutate(["currentUserLogs"], () => {}, {
       optimisticData: (data: LogViewRow[] | undefined) => {
