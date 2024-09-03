@@ -5,7 +5,6 @@ import { DeleteButton } from "./ui/DeleteButton";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import { LogViewRow } from "../../database.types";
 import { TimeSince } from "../components/TimeSince";
-import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +35,12 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
         }}
       >
         <Box
-          sx={{ display: "flex", alignItems: "center" }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            height: 50,
+          }}
           onClick={() => navigate(`logs/${log.uuid}`, { replace: true })}
         >
           <Stack direction={"row"} spacing={2} alignItems={"center"}>
@@ -67,7 +71,10 @@ export function LoggerListItem({ log, isEditMode, onDelete }: LoggerItemProps) {
             </Typography>
             {!isEditMode && (
               <Typography sx={{ marginLeft: 1, fontSize: "medium" }}>
-                <TimeSince lastUpdate={dayjs(log.last_updated_at).valueOf()} />
+                <TimeSince
+                  logItem={log}
+                  isOunces={(log.name ?? "").toLowerCase().includes("feeding")}
+                />
               </Typography>
             )}
           </Stack>

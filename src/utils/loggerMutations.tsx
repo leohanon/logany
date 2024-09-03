@@ -20,6 +20,8 @@ export const addLogMutationOptions = (
     name: newLogName,
     last_updated_at: null,
     created_at: dayjs().toISOString(),
+    backlog: 0,
+    next_mult: 1.25,
   };
   return {
     optimisticData: (data: LogViewRow[] | undefined) => {

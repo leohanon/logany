@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { BarChart } from "@mui/x-charts";
 import { CreateLogger } from "../components/ui/CreateLogger";
 import { IndividualLogItem } from "../components/IndividualLogItem";
 import { IndividualLogNavBar } from "../components/IndividualLogNavBar";
 import { Stack } from "@mui/material";
+import { get30DCounts } from "../utils/helper";
 import { useLogItems } from "../hooks/useLogItems";
 import { useLoggerListContext } from "../hooks/useLoggerListContext";
 import { useState } from "react";
@@ -22,6 +24,8 @@ export function IndividualLog() {
 
   const { handleAddToLog } = useLoggerListContext();
 
+  const dataset = get30DCounts(logItemsData ?? []);
+
   return (
     <>
       <IndividualLogNavBar
@@ -30,6 +34,14 @@ export function IndividualLog() {
         handleGoHome={handleGoHome}
         handleToggle={handleToggle}
       />
+      <div style={{ marginTop: -20, marginBottom: -30 }}>
+        <BarChart
+          dataset={dataset}
+          xAxis={[{ scaleType: "band", dataKey: "date" }]}
+          series={[{ dataKey: "count" }]}
+          height={250}
+        />
+      </div>
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}

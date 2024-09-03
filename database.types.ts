@@ -18,18 +18,21 @@ export type Database = {
     Tables: {
       log_items: {
         Row: {
+          backlog: number;
           created_at: string;
           log_uuid: string;
           note: string;
           uuid: string;
         };
         Insert: {
+          backlog?: number;
           created_at?: string;
           log_uuid?: string;
           note?: string;
           uuid?: string;
         };
         Update: {
+          backlog?: number;
           created_at?: string;
           log_uuid?: string;
           note?: string;
@@ -143,20 +146,20 @@ export type Database = {
       };
       logs: {
         Row: {
+          backlog: number;
           created_at: string;
-          last_log_at: string;
           name: string;
           uuid: string;
         };
         Insert: {
+          backlog?: number;
           created_at?: string;
-          last_log_at?: string;
           name?: string;
           uuid?: string;
         };
         Update: {
+          backlog?: number;
           created_at?: string;
-          last_log_at?: string;
           name?: string;
           uuid?: string;
         };
@@ -164,11 +167,35 @@ export type Database = {
       };
     };
     Views: {
+      log_items_count: {
+        Row: {
+          created_at: string | null;
+          log_items_count: number | null;
+          log_uuid: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "log_items_log_uuid_fkey";
+            columns: ["log_uuid"];
+            isOneToOne: false;
+            referencedRelation: "logs";
+            referencedColumns: ["uuid"];
+          },
+          {
+            foreignKeyName: "log_items_log_uuid_fkey";
+            columns: ["log_uuid"];
+            isOneToOne: false;
+            referencedRelation: "logs_summary";
+            referencedColumns: ["uuid"];
+          },
+        ];
+      };
       logs_summary: {
         Row: {
           created_at: string | null;
           last_updated_at: string | null;
           name: string | null;
+          next_mult: number | null;
           uuid: string | null;
         };
         Relationships: [];
